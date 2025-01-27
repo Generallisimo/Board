@@ -1,0 +1,46 @@
+# Laravel specific
+Exchange_Board/.env
+Exchange_Board/.env.*
+Exchange_Board/storage/*.key
+Exchange_Board/vendor
+Exchange_Board/.phpunit.cache
+Exchange_Board/.phpunit.result.cache
+Exchange_Board/public/storage
+Exchange_Board/public/build
+Exchange_Board/public/hot
+
+# Node.js specific
+Exchange_Board/node_modules
+NodeTRON/node_modules
+Exchange_Board/npm-debug.log*
+Exchange_Board/yarn-error.log*
+
+# IDEs and editors
+Exchange_Board/.idea/
+Exchange_Board/.vscode/
+Exchange_Board/.fleet/
+
+# Homestead and Docker related
+Exchange_Board/Homestead.json
+Exchange_Board/Homestead.yaml
+
+# Backup files
+Exchange_Board/*.backup
+Exchange_Board/*.bak
+Exchange_Board/*.swp
+
+# Logs
+Exchange_Board/storage/logs/*
+Exchange_Board/logs/*
+Exchange_Board/*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Other
+Exchange_Board/auth.json
+Exchange_Board/node_modules/.cache/
+
+# DB
+tmp/

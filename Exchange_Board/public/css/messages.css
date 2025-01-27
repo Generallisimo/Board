@@ -1,0 +1,83 @@
+/* Контейнер чата */
+#chat-container {
+    height: 500px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #27293d;
+    border: #27293d;
+}
+
+.message {
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 15px;
+    max-width: 60%;
+}
+.message-name {
+    color: #e2e3e5;
+    font-weight: bold;
+    margin: 0 0 5px;
+    font-size: 0.9em;
+}
+
+.message-name.sent {
+    color: #e2e3e5; 
+    text-align: right; 
+    margin-left: auto; 
+}
+
+.message-name.received {
+    color: #e2e3e5; 
+    text-align: left;
+    margin-right: auto;
+}
+
+.message.sent {
+    background-image: linear-gradient(to bottom left, #e14eca, #ba54f5, #e14eca);
+    transition: all .15s ease;
+    margin-left: auto;
+    text-align: right;
+}
+
+.message.received {
+    background-image: linear-gradient(to bottom left, #516b84, #465183, #37424c);
+    transition: all .15s ease;
+    margin-right: auto;
+    text-align: left;
+}
+
+/* Форма отправки сообщения всегда снизу */
+#message-form {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background-color: #27293d;
+    border-top: 1px solid #27293d;
+}
+
+/* Поле ввода сообщения */
+#message-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #e2e3e5;
+    margin-top: 5px;
+    background-color: #e2e3e5;
+    color: #5e5a5a;
+}
+
+/* Кнопка отправки */
+#message-form button {
+    border-radius: 20px;
+    padding: 10px 20px;
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+}
+.input-group{
+    flex-wrap: nowrap;
+}
