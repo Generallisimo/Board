@@ -17,7 +17,7 @@ services:
   exchange_board:
     image: $REGISTRY/dev/exchange_board:$CI_COMMIT_SHA
     volumes:
-      - ./ExchangeBoard:/var/www/ExchangeBoard
+      - ./Exchange_Board:/var/www/Exchange_Board
     environment:
       - APP_KEY=$APP_KEY
       - APP_NAME=$APP_NAME
