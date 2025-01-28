@@ -5,6 +5,8 @@ WORKDIR /var/www/NodeTRON
 COPY ./NodeTRON/package*.json ./ 
 
 RUN npm install
+RUN npm install -g nodemon
+
 
 COPY ./NodeTRON ./
 
