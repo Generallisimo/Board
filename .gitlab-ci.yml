@@ -43,8 +43,8 @@ dev_deploy:
     - docker rm $(docker ps -a | grep ${CONTAINER_PREFIX}_ | awk '{print $1}') || true
     - docker volume rm $(docker volume ls | grep ${CONTAINER_PREFIX}_ | awk '{print $2}') || true
     - docker-compose -p $CONTAINER_PREFIX -f docker-compose.yml up -d
-    - docker exec ${CONTAINER_PREFIX}_Exchange_Board php composer update
-    - docker exec ${CONTAINER_PREFIX}_Exchange_Board php composer install
+    - docker exec ${CONTAINER_PREFIX}_Exchange_Board composer update
+    - docker exec ${CONTAINER_PREFIX}_Exchange_Board composer install
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan migrate --force
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan cache:clear
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan config:cache
