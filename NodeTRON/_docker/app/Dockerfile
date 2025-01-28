@@ -13,3 +13,4 @@ RUN chmod -R 755 /var/www/NodeTRON
 EXPOSE 3000
 
 CMD ["npm", "start"]
+ 
