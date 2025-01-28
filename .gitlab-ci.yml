@@ -32,7 +32,7 @@ node_tron_build:
 
 dev_deploy:
   stage: dev
-  when: manual
+  # when: manual
   tags:
     - dev
   only:
@@ -51,8 +51,8 @@ dev_deploy:
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board npm install
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board npm run build
     - docker exec ${CONTAINER_PREFIX}_NodeTRON npm install
-    - docker exec ${CONTAINER_PREFIX}_NodeTRON npm start
 
+    # - docker exec ${CONTAINER_PREFIX}_NodeTRON npm start
     # - docker exec ${CONTAINER_PREFIX}_app composer update
     # - docker exec ${CONTAINER_PREFIX}_app composer install
     # - docker exec ${CONTAINER_PREFIX}_app php artisan migrate --force
