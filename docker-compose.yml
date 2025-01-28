@@ -5,7 +5,7 @@ services:
     image: nginx:latest
     volumes:
       - ./Exchange_Board:/var/www/Exchange_Board
-      - ./_docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./Exchange_Board/_docker/nginx/conf.d:/etc/nginx/conf.d
       - ./NodeTRON:/var/www/NodeTRON
     ports:
       - 80:80
