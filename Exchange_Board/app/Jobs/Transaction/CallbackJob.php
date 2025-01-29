@@ -32,6 +32,7 @@ class CallbackJob implements ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('getInCallbackJob: ', [$this->callback]);
         try{
             Http::timeout(1)->async()->post($this->callback, [
                 'status'=>$this->status

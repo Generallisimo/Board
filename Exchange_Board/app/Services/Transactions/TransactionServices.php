@@ -2,18 +2,19 @@
 
 namespace App\Services\Transactions;
 
-use App\Jobs\Exchange\AgentJob;
-use App\Jobs\Exchange\ClientJob;
-use App\Jobs\Exchange\PlatformJob;
-use App\Jobs\Exchange\UpdateJob;
-use App\Jobs\Transaction\CallbackJob;
-use App\Jobs\TRX\CheckTRXJob;
-use App\Jobs\UpdateExchangeJob;
 use App\Models\Client;
-use App\Models\Exchange;
 use App\Models\Market;
+use App\Models\Exchange;
+use App\Jobs\TRX\CheckTRXJob;
+use App\Jobs\Exchange\AgentJob;
+use App\Jobs\UpdateExchangeJob;
+use App\Jobs\Exchange\ClientJob;
+use App\Jobs\Exchange\UpdateJob;
+use App\Jobs\Exchange\PlatformJob;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use App\Jobs\Transaction\CallbackJob;
 
 class TransactionServices
 {
@@ -70,12 +71,12 @@ class TransactionServices
         ]);
         
         $exchange_id = Exchange::where('exchange_id', $exchange)->first();
-       
+        Log::info("exchangeIdService: ", [$exchange ,$exchange_id]);
         $market = Market::where('hash_id', $exchange_id->market_id)->first();
         CheckTRXJob::dispatch($market->details_from);
 
         $callback = $exchange_id->callback;
-
+        
         if($status === 'fraud'){    
             $client = Client::where('hash_id', $exchange_id->client_id)->first();
             $currentFraudValue = $client->fraud;
@@ -93,7 +94,7 @@ class TransactionServices
         }elseif($status === 'fraud'){
             CallbackJob::dispatch($callback, $status);
         }
-
+        
         UpdateJob::dispatch($exchange);
 
 

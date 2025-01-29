@@ -34,7 +34,7 @@
                 <h5 class="title text-center" style="font-size: 30px;">Оплата</h5>
             </div>
             <form 
-                method="get" 
+                method="post" 
                 action="{{route(
                     'payment.create', 
                     [

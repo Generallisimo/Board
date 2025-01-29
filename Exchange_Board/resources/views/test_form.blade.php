@@ -25,11 +25,10 @@
 <body>
     <div class="card">
         <div class="card-body">
-            <form action="http://localhost:8000/api/payment/LrgwsccgcBYp/200/rub">
+            <form action="http://91.184.245.198:56735/api/payment/NVpeWOXYnqZ7/200/rub" method="post">
                 <h1>Тестовый переход на оплату</h1>
                 <div class="form-group">
-                    <!-- <label>Callback URL</label> -->
-                    <input name="callback" class="form-control" value="{{config('url.api_local')}}/api/test/show" hidden>
+                    <input name="callback" class="form-control" value="http://91.184.245.198:56735/api/test/show" hidden>
                 </div>
                 <div class="form-group">
                     <label>Оплата подписки</label>

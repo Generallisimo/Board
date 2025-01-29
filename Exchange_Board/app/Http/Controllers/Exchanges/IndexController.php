@@ -11,9 +11,12 @@ class IndexController extends BaseController
     /**
      * Handle the incoming request.
      */
-    public function __invoke($client_id, $amount, $currency, IndexRequest $indexRequest)
+    // public function __invoke($client_id, $amount, $currency, IndexRequest $indexRequest)
+    public function __invoke($client_id, $amount, $currency, Request $indexRequest)
     {
-        $data = $indexRequest->validated();
+        $data = $indexRequest->input('callback');
+        // dd($data);
+        // $data = $indexRequest->validated();
         
         $result = $this->service->index($client_id, $amount, $currency, $data);
         

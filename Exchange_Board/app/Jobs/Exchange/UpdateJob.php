@@ -34,6 +34,7 @@ class UpdateJob implements ShouldQueue
 
     public function handle(): void
     {
+        Log::info("getUpdateJobId: ", [$this->exchange]);
         $response = Exchange::where('exchange_id', $this->exchange)->first();
 
         $client = Client::where('hash_id', $response->client_id)->first();
@@ -41,7 +42,7 @@ class UpdateJob implements ShouldQueue
         $market = Market::where('hash_id', $response->market_id)->first();
         $agent = Agent::where('hash_id', $market->agent_id)->first();
 
-        $platform = Platform::find(1);
+        $platform = Platform::where('hash_id', 'platform')->first();
            
         if($response->result === 'to_success'){
 

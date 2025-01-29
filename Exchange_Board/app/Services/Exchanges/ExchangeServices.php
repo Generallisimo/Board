@@ -17,7 +17,8 @@ use Illuminate\Support\Str;
 
 class ExchangeServices
 {
-    public function index($client_id, $amount, $currency, array $data){
+    // public function index($client_id, $amount, $currency, array $data){
+    public function index($client_id, $amount, $currency, $data){
         $exchange_id = Str::uuid();
 
         $market = Market::where('status', 'online')->inRandomOrder()->first();
@@ -42,7 +43,7 @@ class ExchangeServices
             'exchange_id'=>$exchange_id,
             'currency'=>$currency,
             'unique_method'=>$unique_method,
-            'callback'=>$data['callback']
+            'callback'=>$data
         ];
         
     

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Transactions;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Jobs\Exchange\UpdateJob;
 
 class UpdateController extends BaseController
 {
@@ -12,9 +14,9 @@ class UpdateController extends BaseController
      */
     public function __invoke($exchange_id, $status, $message)
     {
-        
+        Log::info('getUpdateControllerId: ', [$exchange_id]);
         $result = $this->service->update($exchange_id, $status, $message);
-        // dd($result);
+
         if($result === true){
             return redirect()->back()->with('successful', 'Данные о транзакции обновлены!');
         }else{
