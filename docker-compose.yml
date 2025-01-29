@@ -33,6 +33,7 @@ services:
       - WALLET=$WALLET
       - PRIVATE_KEY_WALLET=$PRIVATE_KEY_WALLET  
       - TRON_HOST=$TRON_HOST  
+      - QUEUE_CONNECTION=$QUEUE_CONNECTION  
     depends_on:
       - db
     container_name: ${CONTAINER_PREFIX}_Exchange_Board
