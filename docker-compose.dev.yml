@@ -5,7 +5,7 @@ services:
     image: nginx:latest
     volumes:
       - ./Exchange_Board:/var/www/Exchange_Board
-      - ./Exchange_Board/_docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./Exchange_Board/_docker/nginx/local.conf.d:/etc/nginx/conf.d
       - ./NodeTRON:/var/www/NodeTRON
     ports:
       - 8181:80
@@ -20,6 +20,7 @@ services:
       dockerfile: Exchange_Board/_docker/gitlab/app/Dockerfile
     volumes:
       - ./Exchange_Board:/var/www/Exchange_Board
+      - /var/www/Exchange_Board/vendor
     depends_on:
       - db
     container_name: project_Exchange_Board
@@ -30,6 +31,7 @@ services:
       dockerfile: NodeTRON/_docker/app/Dockerfile
     volumes:
       - ./NodeTRON:/var/www/NodeTRON
+      - /var/www/NodeTRON/node_modules
     ports:
       - 3000:3000
     depends_on:
