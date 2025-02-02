@@ -52,6 +52,6 @@ dev_deploy:
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board npm run build
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan up
     - docker exec ${CONTAINER_PREFIX}_NodeTRON npm install
-    - docker exec ${CONTAINER_PREFIX}_Exchange_Board whoami
+    - docker exec ${CONTAINER_PREFIX}_Exchange_Board whoami 
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board namei -l /var/www/Exchange_Board/storage/logs/
  
