@@ -35,12 +35,15 @@ class TopUpServices
     $user = $this->user($role, $hash_id);
 
     $balance = (new CheckBalance($user))->checkBalanceUser();
-        Log::info('Check success, balance: ' . $balance['success']);
-        if($balance['success']){
-            $trx = CheckTRXJob::dispatch($wallet);
-            Log::info("TRX response: " . json_encode(['result' => $trx]));
-            return ['result'=> $result];
-        }
+    // dd($balance);
+    Log::info('Check success, balance: ' . $balance['success']);
+    if($balance['success']){
+        $trx = CheckTRXJob::dispatch($wallet);
+        Log::info("TRX response: " . json_encode(['result' => $trx]));
+        return ['result'=> $result];
+    }
+    
+    
     }
 
    protected function user($role, $hash_id){

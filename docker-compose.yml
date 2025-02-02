@@ -51,7 +51,7 @@ services:
     image: mysql:8.0
     restart: always
     volumes:
-      - /var/lib/mysql:/var/lib/mysql
+      - /var/data/exchange-board/mysql-db:/var/lib/mysql
     environment:
       MYSQL_DATABASE: ExchangeBoard
       MYSQL_ROOT_PASSWORD: root

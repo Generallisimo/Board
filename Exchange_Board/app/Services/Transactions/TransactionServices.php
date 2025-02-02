@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Jobs\Transaction\CallbackJob;
+use App\Models\Agent;
+use App\Models\Platform;
 
 class TransactionServices
 {
@@ -64,41 +66,45 @@ class TransactionServices
     }
 
     public function update($exchange, $status, $message){
-
         $result = Exchange::where('exchange_id', $exchange)->update([
             'result'=>$status,
             'message'=>$message
         ]);
-        
         $exchange_id = Exchange::where('exchange_id', $exchange)->first();
-        Log::info("exchangeIdService: ", [$exchange ,$exchange_id]);
-        $market = Market::where('hash_id', $exchange_id->market_id)->first();
-        CheckTRXJob::dispatch($market->details_from);
-
-        $callback = $exchange_id->callback;
-        
-        if($status === 'fraud'){    
-            $client = Client::where('hash_id', $exchange_id->client_id)->first();
-            $currentFraudValue = $client->fraud;
-            $client->update([
-                'fraud' => $currentFraudValue + 1
-            ]);
-
-            CallbackJob::dispatch($callback, $status);
-        }elseif($status === 'error'){
-            CallbackJob::dispatch($callback, $status);
-        }elseif($status === 'archive'){
-            CallbackJob::dispatch($callback, $status);
-        }elseif($status === 'to_success'){
-            CallbackJob::dispatch($callback, 'success');
-        }elseif($status === 'fraud'){
-            CallbackJob::dispatch($callback, $status);
+        $platform = Platform::where('hash_id', $exchange_id->agent_id)->first();
+        if($platform){
+            Platform::where('hash_id', $exchange_id->agent_id)->increment('balance', $exchange_id->amount_agent);
+        }else{
+            Agent::where('hash_id', $exchange_id->agent_id)->increment('balance', $exchange_id->amount_agent);
         }
-        
-        UpdateJob::dispatch($exchange);
-
-
+        Market::where('hash_id', $exchange_id->market_id)->increment('balance', $exchange_id->amount_market);
+        Client::where('hash_id', $exchange_id->client_id)->increment('balance', $exchange_id->amount_client);
         return $result ? true : "Ошибка обратитесь в поддержку"; 
+
+        // $market = Market::where('hash_id', $exchange_id->market_id)->first();
+        // CheckTRXJob::dispatch($market->details_from);
+
+        // $callback = $exchange_id->callback;
+        
+        // if($status === 'fraud'){    
+        //     $client = Client::where('hash_id', $exchange_id->client_id)->first();
+        //     $currentFraudValue = $client->fraud;
+        //     $client->update([
+        //         'fraud' => $currentFraudValue + 1
+        //     ]);
+
+        //     CallbackJob::dispatch($callback, $status);
+        // }elseif($status === 'error'){
+        //     CallbackJob::dispatch($callback, $status);
+        // }elseif($status === 'archive'){
+        //     CallbackJob::dispatch($callback, $status);
+        // }elseif($status === 'to_success'){
+        //     CallbackJob::dispatch($callback, 'success');
+        // }elseif($status === 'fraud'){
+        //     CallbackJob::dispatch($callback, $status);
+        // }
+        
+        // UpdateJob::dispatch($exchange);
 
     }
 }
