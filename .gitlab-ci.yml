@@ -47,7 +47,7 @@ dev_deploy:
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan down
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan config:cache
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan cache:clear
-    - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan migrate
+    - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan migrate --force
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board npm install
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board npm run build
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan up
