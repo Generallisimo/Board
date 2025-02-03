@@ -43,15 +43,12 @@ dev_deploy:
     - docker rm $(docker ps -a | grep ${CONTAINER_PREFIX}_ | awk '{print $1}') || true
     - docker volume rm $(docker volume ls | grep ${CONTAINER_PREFIX}_ | awk '{print $2}') || true
     - docker-compose -p $CONTAINER_PREFIX -f docker-compose.yml up -d
+    - docker exec ${CONTAINER_PREFIX}_Exchange_Board composer update
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board composer install
-    - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan down
-    - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan config:cache
-    - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan cache:clear
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan migrate --force
+    - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan cache:clear
+    - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan config:cache
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board npm install
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board npm run build
-    - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan up
     - docker exec ${CONTAINER_PREFIX}_NodeTRON npm install
-    - docker exec ${CONTAINER_PREFIX}_Exchange_Board whoami 
-    - docker exec ${CONTAINER_PREFIX}_Exchange_Board namei -l /var/www/Exchange_Board/storage/logs/
  

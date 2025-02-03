@@ -18,7 +18,7 @@ services:
     image: $REGISTRY/dev/exchange_board:$CI_COMMIT_SHA
     volumes:
       - ./Exchange_Board:/var/www/Exchange_Board
-      - ~/Exchange_Board/storage/logs/laravel.log:/var/www/Exchange_Board/storage/logs/laravel.log
+      - /var/www/Exchange_Board/vendor
     environment:
       - APP_KEY=$APP_KEY
       - APP_NAME=$APP_NAME
@@ -51,7 +51,7 @@ services:
     image: mysql:8.0
     restart: always
     volumes:
-      - /var/data/exchange-board/mysql-db:/var/lib/mysql
+      - /var/lib/mysql:/var/lib/mysql
     environment:
       MYSQL_DATABASE: ExchangeBoard
       MYSQL_ROOT_PASSWORD: root
