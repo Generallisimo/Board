@@ -15,7 +15,7 @@ return new class extends Migration
             
             $table->id();
             $table->string('hash_id');
-            $table->decimal('balance', 18, 8)->nullable()->change();
+            $table->decimal('balance', 18, 8)->nullable();
             $table->string('details_from')->unique();
             $table->string('private_key');
             $table->string('details_to')->unique();

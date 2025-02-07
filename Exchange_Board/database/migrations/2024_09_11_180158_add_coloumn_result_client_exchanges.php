@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('exchanges', function (Blueprint $table) {
-            $table->decimal('result_client', 18, 8)->nullable()->change();
+            $table->decimal('result_client', 18, 8)->nullable();
         });
     }
 
