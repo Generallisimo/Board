@@ -7,6 +7,8 @@ use App\Models\Agent;
 use App\Models\Platform;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
+
 
 class UserSeeder extends Seeder
 {
