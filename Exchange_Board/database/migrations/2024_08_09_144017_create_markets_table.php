@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('markets', function (Blueprint $table) {
             $table->id();
             $table->string('hash_id');
-            $table->string('balance')->nullable();
+            $table->decimal('balance', 18, 8)->nullable()->change();
+            $table->decimal('balance_hold', 18, 8)->nullable()->change();
             $table->string('details_from');
             $table->string('private_key');
             $table->string('details_to');

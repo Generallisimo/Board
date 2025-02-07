@@ -21,13 +21,31 @@ class ExchangeServices
     public function index($client_id, $amount, $currency, $data){
         $exchange_id = Str::uuid();
 
-        $market = Market::where('status', 'online')->inRandomOrder()->first();
-        // dd($market);
-        if($market === null){
+        // $market = Market::where('status', 'online')->inRandomOrder()->first();
+        // // dd($market);
+        // if($market === null){
+        //     return [
+        //         'success'=>false
+        //     ];
+        // }
+        $curse = (new CheckCurse($currency))->curse();
+        $response = $amount * (1 / $curse['message']);
+
+        $market = Market::where('status', 'online')
+        ->where('balance', '>=', $response)
+        ->inRandomOrder()
+        ->first();
+        
+        if ($market === null) {
             return [
-                'success'=>false
+                'success' => false,
+                'message' => 'Нет доступного менялы с достаточным балансом'
             ];
         }
+
+        $market->balance -= $response;
+        $market->balance_hold += $response;
+        $market->save();
 
         $market_id=$market->hash_id;
          

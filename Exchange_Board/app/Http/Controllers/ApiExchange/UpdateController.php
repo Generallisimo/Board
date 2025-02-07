@@ -14,6 +14,9 @@ class UpdateController extends BaseController
     {
         $data = $this->service->update($exchange_id);
 
-        return response()->json($data['message']);
+        return response()->json([
+            'result'=>$data['result'], 
+            'message'=>$data['message']]
+        );
     }
 }

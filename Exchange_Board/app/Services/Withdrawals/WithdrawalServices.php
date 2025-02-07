@@ -2,17 +2,18 @@
 
 namespace App\Services\Withdrawals;
 
-use App\Components\CheckBalance\CheckBalance;
-use App\Components\SendToUserTRON\SendTRON;
-use App\Components\WithdrawalTRON\WithdrawalTRON;
-use App\Jobs\TRX\CheckTRXJob;
+use App\Models\User;
 use App\Models\Agent;
 use App\Models\Client;
 use App\Models\Market;
 use App\Models\Platform;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Jobs\TRX\CheckTRXJob;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Components\SendToUserTRON\SendTRON;
+use App\Components\CheckBalance\CheckBalance;
+use App\Components\WithdrawalTRON\WithdrawalTRON;
+use App\Components\CheckTRXBalance\CheckTRXBalance;
 
 class WithdrawalServices
 {
@@ -24,29 +25,30 @@ class WithdrawalServices
     }
 
     public function update(array $data_request){
-
+        Log::info("getAmountFromUser: ", [$data_request['you_send']]);
         $hash_id = Auth::user()->hash_id;
         $role = User::where('hash_id', $hash_id)->first();
         
-        $userID = $this->user($role, $hash_id);
+        $userBefore = $this->user($role, $hash_id);
 
-        CheckTRXJob::dispatch($userID->details_from);
+        $wallet = config('wallet.wallet');
+        $trx = (new CheckTRXBalance($wallet))->update();
+        Log::info("getResponseTRX: " . json_encode(['result' => $trx]));
         
-        $initialBalance = (new CheckBalance($userID))->checkBalanceUser();
+        $initialBalance = $userBefore->balance;
+        Log::info("getBeforeWithdrawalBalanceUser: ", [$initialBalance]);
 
         $result = (new WithdrawalTRON(
             $data_request['you_send'],
             $data_request['you_send_details'],
-            $userID->details_from,
-            $userID->private_key,
             $data_request['hash_id']
         ))->store();
 
-        $newBalance  = (new CheckBalance($userID))->checkBalanceUser();
-
+        $userAfter = $this->user($role, $hash_id);
+        $newBalance  = $userAfter->balance;
+        Log::info("getAfterWithdrawalBalanceUser: ", [$newBalance]);
 
         if ($initialBalance !== $newBalance) {
-
             return true;
         } else {
             Log::info('Transaction failed');

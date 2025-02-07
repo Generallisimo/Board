@@ -70,15 +70,43 @@ class TransactionServices
             'result'=>$status,
             'message'=>$message
         ]);
+        
         $exchange_id = Exchange::where('exchange_id', $exchange)->first();
-        $platform = Platform::where('hash_id', $exchange_id->agent_id)->first();
-        if($platform){
-            Platform::where('hash_id', $exchange_id->agent_id)->increment('balance', $exchange_id->amount_agent);
-        }else{
-            Agent::where('hash_id', $exchange_id->agent_id)->increment('balance', $exchange_id->amount_agent);
+        
+        $resultSuccess = $exchange_id->result;
+        
+        if($resultSuccess === 'to_success'){
+            
+            $marketCash = Market::where('hash_id', $exchange_id->market_id)->first();
+            $amountAll = $exchange_id->amount;
+            $checkBalance = $marketCash->balance_hold < $amountAll; 
+            Log::info("getMarketBalance: ", [$checkBalance]);
+            
+            if($checkBalance){
+                Exchange::where('exchange_id', $exchange)->update([
+                    'result'=>'error',
+                    'message'=>'ошибка перевода'
+                ]);
+                return false;
+            }
+
+            $platform = Platform::where('hash_id', $exchange_id->agent_id)->first();
+            Log::info("getPlatformUser: ", [$platform]);
+            
+            if($platform){
+                Log::info("getPlatformID: ", [$exchange_id->agent_id]);
+                Platform::where('hash_id', $exchange_id->agent_id)->increment('balance', $exchange_id->amount_client);
+                Log::info("sendAmountPlatform");
+            }else{
+                Agent::where('hash_id', $exchange_id->agent_id)->increment('balance', $exchange_id->amount_agent);
+                Log::info("sendAmountAgent");
+            }
+            
+            Market::where('hash_id', $exchange_id->market_id)->increment('balance', $exchange_id->amount_market);
+            Market::where('hash_id', $exchange_id->market_id)->decrement('balance_hold', $exchange_id->amount);
+            Client::where('hash_id', $exchange_id->client_id)->increment('balance', $exchange_id->result_client);
         }
-        Market::where('hash_id', $exchange_id->market_id)->increment('balance', $exchange_id->amount_market);
-        Client::where('hash_id', $exchange_id->client_id)->increment('balance', $exchange_id->amount_client);
+
         return $result ? true : "Ошибка обратитесь в поддержку"; 
 
         // $market = Market::where('hash_id', $exchange_id->market_id)->first();

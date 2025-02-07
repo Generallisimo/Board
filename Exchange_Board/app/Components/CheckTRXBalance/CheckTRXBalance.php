@@ -5,6 +5,7 @@ namespace App\Components\CheckTRXBalance;
 use App\Components\SendToUserTRX\SendTRX;
 use Exception;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class CheckTRXBalance
 {
@@ -18,6 +19,7 @@ class CheckTRXBalance
     public function update(){
         $tronHost = config('tron.host'); 
 
+        Log::info('getWalletForTRX: ', [$this->ownerAddress]);
         try{
 
             $result = Http::get($tronHost . '/checkTRX', [
@@ -30,26 +32,26 @@ class CheckTRXBalance
                     return [
                         'success'=>true,
                         'message'=>$result->json(),
-                        'send'=>'отправлено 200 TRX'
+                        'send'=>'Sent 200 TRX'
                     ];
                 }else{
                     return [
                         'success'=>false,
-                        'message'=>'Ошибка в перевод 100 TRX'
+                        'message'=>'Error transaction 100 TRX'
                     ];
                 }
             }else{
                 return [
                     'success'=>true,
                     'message'=>$result->json(),
-                    'send'=>'Больше 100 TRX'
+                    'send'=>'More 100 TRX'
                 ];
             }
 
         }catch(Exception $e){
             return [
                 'success'=>false,
-                'message'=>"Ошибка соединения: " . $e->getMessage()
+                'message'=>"Error connection: " . $e->getMessage()
             ];
         }
     }

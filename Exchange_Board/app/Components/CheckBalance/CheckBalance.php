@@ -23,7 +23,7 @@ class CheckBalance{
 
         $tronHost = config('tron.host'); 
         try{
-            $currentBalance = $this->user->balance;
+            // $currentBalance = $this->user->balance;
 
             $checkBalance = Http::get($tronHost . '/check_balance', [
                 'ownerAddress'=>$this->user->details_from,
@@ -31,10 +31,10 @@ class CheckBalance{
             $responseBalance = $checkBalance->json();
             $amountUpdate = $responseBalance['balance'];
             
-            if($currentBalance !== $amountUpdate){
-                $this->user->balance = $amountUpdate;
-                $this->user->save(); 
-            }
+            // if($currentBalance !== $amountUpdate){
+            //     $this->user->balance = $amountUpdate;
+            //     $this->user->save(); 
+            // }
             // add validate error
             return [
                 'success'=> true,

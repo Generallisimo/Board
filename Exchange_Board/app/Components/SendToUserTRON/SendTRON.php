@@ -23,7 +23,7 @@ class SendTRON{
     
     public function send(){
         $tronHost = config('tron.host'); 
-
+        Log::info('getParamSend', [$this->amount, $this->addressTo, $this->ownerAddress, $this->ownerKey]);
         try{
             $urlSend = $tronHost . '/sendTronUSDT';
 

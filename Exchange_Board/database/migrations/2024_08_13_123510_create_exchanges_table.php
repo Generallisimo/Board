@@ -18,20 +18,17 @@ return new class extends Migration
             $table->string('currency')->nullable();
             $table->string('client_id');
             $table->string('market_id');
-            $table->string('amount');
-            $table->string('amount_users')->nullable();
+            $table->decimal('amount', 18, 8)->nullable()->change();
+            $table->decimal('amount_users', 18, 8)->nullable()->change();            
             $table->string('result')->nullable()->default('await');
             $table->string('message')->nullable();
-            $table->string('percent_client')->nullable();
-            $table->string('amount_client')->nullable();
-            $table->string('percent_market')->nullable();
-            $table->string('amount_market')->nullable();
-            $table->string('percent_agent')->nullable();
-            $table->string('amount_agent')->nullable();
+            $table->decimal('percent_client', 18, 8)->nullable()->change();
+            $table->decimal('amount_client', 18, 8)->nullable()->change();
+            $table->decimal('percent_market', 18, 8)->nullable()->change();
+            $table->decimal('amount_market', 18, 8)->nullable()->change();
+            $table->decimal('percent_agent', 18, 8)->nullable()->change();
+            $table->decimal('amount_agent', 18, 8)->nullable()->change();
             $table->string('details_market_payment')->nullable();
-
-            // $table->string('details_market');
-            // $table->string('details_client');
             $table->timestamps();
             $table->softDeletes();
         });

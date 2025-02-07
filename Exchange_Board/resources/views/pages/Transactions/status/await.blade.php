@@ -14,7 +14,7 @@
             <th>Заработок Обменника</th>
             <th>Процент Куратора</th>
             <th>Заработок Куратора</th>
-            <th>Процент Клиента</th>
+            {{-- <th>Процент Клиента</th> --}}
             <th>Заработок Клиента</th>
             <th class="text-right">Действие</th>
         </tr>
@@ -36,8 +36,8 @@
             <td>{{$exchange->amount_market}}</td>
             <td>{{$exchange->percent_agent}}</td>
             <td>{{$exchange->amount_agent}}</td>
-            <td>{{$exchange->percent_client}}</td>
-            <td>{{$exchange->amount_client}}</td>
+            {{-- <td>{{$exchange->percent_client}}</td> --}}
+            <td>{{$exchange->result_client}}</td>
             <td class="td-actions text-right">
                 <form method="POST" action="{{route('transaction.update',['exchange_id'=> $exchange->exchange_id, 'status'=>'to_success', 'message'=>'Ожидания получения суммы'])}}">
                     @csrf

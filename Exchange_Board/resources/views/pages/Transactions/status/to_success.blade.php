@@ -15,7 +15,7 @@
             <th>Заработок Обменника</th>
             <th>Процент Куратора</th>
             <th>Заработок Куратора</th>
-            <th>Процент Клиента</th>
+            {{-- <th>Процент Клиента</th> --}}
             <th>Заработок Клиента</th>
         </tr>
     </thead>
@@ -36,8 +36,8 @@
             <td>{{$exchange->amount_market}}</td>
             <td>{{$exchange->percent_agent}}</td>
             <td>{{$exchange->amount_agent}}</td>
-            <td>{{$exchange->percent_client}}</td>
-            <td>{{$exchange->amount_client}}</td>
+            {{-- <td>{{$exchange->percent_client}}</td> --}}
+            <td>{{$exchange->result_client}}</td>
         </tr>
         @endforeach
     </tbody>
