@@ -31,6 +31,7 @@
                     <tr>
                         <th>Hash_id</th>
                         <th>Процент</th>
+                        <th>Доходы за день</th>
                         <th>Реквезиты пополнения</th>
                         <th>Реквезиты вывода</th>
                         <th>Баланс</th>
@@ -45,8 +46,16 @@
                     <tr>
                         <td>{{$client->hash_id}}</td>
                         <td>{{$client->percent}} %</td>
+                        <td>
+                            @if(isset($data['profit_client'][$client->hash_id]))
+                                @foreach($data['profit_client'][$client->hash_id] as $date => $profit)
+                                    {{ $profit }}
+                                @endforeach
+                            @else
+                                Нет данных
+                            @endif
+                        </td>
                         <td>{{$client->details_from}}</td>
-                        
                         <td>{{$client->details_to}}</td>
                         <td>{{$client->balance}}</td>
                         
@@ -81,6 +90,7 @@
                     <tr>
                         <th>Hash_id</th>
                         <th>Процент</th>
+                        <th>Доходы за день</th>
                         <th>Реквезиты пополнения</th>
                         <th>Реквезиты вывода</th>
                         <th>Баланс</th>
@@ -92,8 +102,16 @@
                     <tr>
                         <td>{{$agent->hash_id}}</td>
                         <td>{{$agent->percent}} %</td>
+                        <td>
+                            @if(isset($data['profit_agent'][$agent->hash_id]))
+                                @foreach($data['profit_agent'][$agent->hash_id] as $date => $profit)
+                                    {{ $profit }}
+                                @endforeach
+                            @else
+                                Нет данных
+                            @endif
+                        </td>
                         <td>{{$agent->details_from}}</td>
-                        
                         <td>{{$agent->details_to}}</td>
                         <td>{{$agent->balance}}</td>
                         <td class="td-actions text-right">
@@ -144,7 +162,9 @@
                     <tr>
                         <th>Hash_id</th>
                         <th>Статус</th>
+                        <th>В сети</th>
                         <th>Процент</th>
+                        <th>Доходы за день</th>
                         <th>Реквезиты пополнения</th>
                         <th>Реквезиты вывода</th>
                         <th>Баланс</th>
@@ -157,9 +177,18 @@
                     <tr>
                         <td>{{$market->hash_id}}</td>
                         <td>{{$market->status}}</td>
+                        <td>{{$data['online_times'][$market->id]}}</td>
                         <td>{{$market->percent}} %</td>
+                        <td>
+                            @if(isset($data['profit_market'][$market->hash_id]))
+                                @foreach($data['profit_market'][$market->hash_id] as $date => $profit)
+                                    {{ $profit }}
+                                @endforeach
+                            @else
+                                Нет данных
+                            @endif
+                        </td>
                         <td>{{$market->details_from}}</td>
-                        
                         <td>{{$market->details_to}}</td>
                         <td>{{$market->balance}}</td>
                         <td class="td-actions text-right">

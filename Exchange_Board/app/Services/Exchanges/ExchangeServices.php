@@ -28,6 +28,13 @@ class ExchangeServices
         //         'success'=>false
         //     ];
         // }
+        if($amount <= 0){
+            return [
+                'success'=>false,
+                'message'=>'ошибка суммы'
+            ];
+        }
+        
         $curse = (new CheckCurse($currency))->curse();
         $response = $amount * (1 / $curse['message']);
 

@@ -39,7 +39,7 @@ class UserSeeder extends Seeder
             'percent'=>'0'
         ]);
 
-        $balancePlatform = (new CheckBalance($user))->checkBalanceUser();
+        $balancePlatform = (new CheckBalance($platform))->checkBalanceUser();
         Log::info("getPlatformSeeder: ", [$platform]);
         $platform->increment('balance', $balancePlatform['balance']);
         

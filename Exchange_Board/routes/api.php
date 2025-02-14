@@ -115,6 +115,7 @@ Route::group(['prefix'=>'botUAH', 'middleware' => ['api']], function(){
     });
 });
 
+Route::get('/listener_app', ['uses'=>'App\Http\Controllers\ListenerApp\StoreController']);
 
 
 // test for payment api

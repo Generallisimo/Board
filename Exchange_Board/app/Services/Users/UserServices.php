@@ -3,17 +3,19 @@
 
 namespace App\Services\Users;
 
-use App\Components\CheckBalance\CheckBalance;
-use App\Components\GenerateWallet\GenerateWallet;
-use App\Components\SendToUserTRX\SendTRX;
-use App\Http\Requests\Users\StoreUsersRequest;
+use App\Models\User;
 use App\Models\Agent;
 use App\Models\Client;
 use App\Models\Market;
 use App\Models\Support;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Models\MarketStatus;
+use Illuminate\Support\Facades\Auth;
+use App\Components\SendToUserTRX\SendTRX;
+use App\Components\CheckBalance\CheckBalance;
+use App\Http\Requests\Users\StoreUsersRequest;
+use App\Components\GenerateWallet\GenerateWallet;
+use Carbon\Carbon;
 
 class UserServices
 {
@@ -130,6 +132,12 @@ class UserServices
             'percent'=>$percent,
             'agent_id'=>$agent_id,
             'private_key'=>$private_key,
+        ]);
+
+        MarketStatus::create([
+            'market_id' => $market->id,
+            'status' => 'offline', // Теперь записываем новый статус
+            'changed_at' => Carbon::now(),
         ]);
 
         new CheckBalance($market);

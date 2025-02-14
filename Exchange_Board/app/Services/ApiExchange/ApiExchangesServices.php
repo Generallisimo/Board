@@ -14,8 +14,15 @@ use Illuminate\Support\Facades\DB;
 
 class ApiExchangesServices
 {
-    public function store($currency, $amount, $api_key)
-{
+    public function store($currency, $amount, $api_key){
+
+    if($amount <= 0){
+        return [
+            'success'=>false,
+            'message'=>'ошибка суммы'
+        ];
+    }
+    
     $exchange_id = Str::uuid();
 
     $curse = (new CheckCurse($currency))->curse();

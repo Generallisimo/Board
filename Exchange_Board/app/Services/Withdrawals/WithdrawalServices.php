@@ -38,6 +38,11 @@ class WithdrawalServices
         $initialBalance = $userBefore->balance;
         Log::info("getBeforeWithdrawalBalanceUser: ", [$initialBalance]);
 
+        $middleware = $data_request['you_send'] + 5;
+        if($initialBalance < $middleware){
+            Log::info('Mooney don`t have');
+            return 'Недостаточно средств ';
+        }
         $result = (new WithdrawalTRON(
             $data_request['you_send'],
             $data_request['you_send_details'],

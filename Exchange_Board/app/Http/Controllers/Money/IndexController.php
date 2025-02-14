@@ -6,14 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
-class IndexController extends Controller
+class IndexController extends BaseController
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
-        $transactions = Transaction::all();
+        $transactions = $this->service->index();
+        // dd($transactions);
+        // $transactions = Transaction::all();
 
         return view('pages.Money.index', compact('transactions'));
     }

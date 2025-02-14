@@ -55,7 +55,8 @@ services:
     environment:
       MYSQL_DATABASE: ExchangeBoard
       MYSQL_ROOT_PASSWORD: root
+      TZ: Europe/Podgorica
     ports:
       - 3306:3306 
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --lower_case_table_names=1 
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --lower_case_table_names=1 --default-time-zone=Europe/Podgorica 
     container_name: ${CONTAINER_PREFIX}_mysql

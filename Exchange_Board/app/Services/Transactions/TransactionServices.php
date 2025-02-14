@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Http;
 use App\Jobs\Transaction\CallbackJob;
 use App\Models\Agent;
 use App\Models\Platform;
+use App\Models\ProfitUser;
+use App\Models\Transaction;
+use Carbon\Carbon;
 
 class TransactionServices
 {
@@ -75,7 +78,15 @@ class TransactionServices
         
         $resultSuccess = $exchange_id->result;
         
-        if($resultSuccess === 'to_success'){
+        if($resultSuccess === 'archive' || $resultSuccess === 'fraud'){
+            $marketCash = Market::where('hash_id', $exchange_id->market_id)->first();
+            $amountAll = $exchange_id->amount;
+            // $marketBalanceHold = $marketCash->balance_hold;
+            $marketCash->increment('balance', $amountAll);
+            $marketCash->decrement('balance_hold', $amountAll);
+        }
+
+        if($resultSuccess === 'success'){
             
             $marketCash = Market::where('hash_id', $exchange_id->market_id)->first();
             $amountAll = $exchange_id->amount;
@@ -89,50 +100,75 @@ class TransactionServices
                 ]);
                 return false;
             }
-
-            $platform = Platform::where('hash_id', $exchange_id->agent_id)->first();
-            Log::info("getPlatformUser: ", [$platform]);
             
-            if($platform){
-                Log::info("getPlatformID: ", [$exchange_id->agent_id]);
-                Platform::where('hash_id', $exchange_id->agent_id)->increment('balance', $exchange_id->amount_client);
-                Log::info("sendAmountPlatform");
-            }else{
-                Agent::where('hash_id', $exchange_id->agent_id)->increment('balance', $exchange_id->amount_agent);
-                Log::info("sendAmountAgent");
-            }
-            
+            // заработок куратора / возможно платформе в роли куратора
+            Agent::where('hash_id', $exchange_id->agent_id)->increment('balance', $exchange_id->amount_agent);
+            // заработок менялы
             Market::where('hash_id', $exchange_id->market_id)->increment('balance', $exchange_id->amount_market);
+            // снимаем деньги с холда
             Market::where('hash_id', $exchange_id->market_id)->decrement('balance_hold', $exchange_id->amount);
+            // заработок клиента
             Client::where('hash_id', $exchange_id->client_id)->increment('balance', $exchange_id->result_client);
+            // заработок платформу от процента на клиент
+            Agent::where('hash_id', 'platform')->increment('balance', $exchange_id->amount_client);
+
+            // деньги менялы
+            $this->storeTransaction($exchange, $exchange_id->market_id, 'меняла', $exchange_id->amount, 'отправлено');
+            $this->storeTransaction($exchange, $exchange_id->market_id, 'меняла', $exchange_id->amount_market, 'получен процент');
+            // деньги клиента
+            $this->storeTransaction($exchange, $exchange_id->client_id, 'клиент', $exchange_id->result_client, 'получен процент');
+            // деньги куратора
+            $this->storeTransaction($exchange, $exchange_id->agent_id, 'клиент', $exchange_id->amount_agent, 'получен процент');
+            // деньги платформы
+            $this->storeTransaction($exchange, 'platform', 'платформа', $exchange_id->amount_client, 'получен процент');
+        
+            //доход клиента
+            $this->storeProfit($exchange_id->client_id, $exchange_id->result_client);
+            //доход менялы
+            $this->storeProfit($exchange_id->market_id, $exchange_id->amount_market);
+            //доход платформы
+            $this->storeProfit('platform', $exchange_id->amount_client);
+            //доход куратора
+            $this->storeProfit($exchange_id->agent_id, $exchange_id->amount_agent);
         }
 
         return $result ? true : "Ошибка обратитесь в поддержку"; 
 
-        // $market = Market::where('hash_id', $exchange_id->market_id)->first();
-        // CheckTRXJob::dispatch($market->details_from);
+    }
 
-        // $callback = $exchange_id->callback;
-        
-        // if($status === 'fraud'){    
-        //     $client = Client::where('hash_id', $exchange_id->client_id)->first();
-        //     $currentFraudValue = $client->fraud;
-        //     $client->update([
-        //         'fraud' => $currentFraudValue + 1
-        //     ]);
+    protected function storeTransaction($exchange_id, $user_id, $user_role, $amount, $status ){
+        Transaction::create([
+            'exchange_id'=>$exchange_id,
+            'user_id'=>$user_id,
+            'user_role'=>$user_role,
+            'amount'=>$amount,
+            'status'=>$status
+        ]);
+    }
 
-        //     CallbackJob::dispatch($callback, $status);
-        // }elseif($status === 'error'){
-        //     CallbackJob::dispatch($callback, $status);
-        // }elseif($status === 'archive'){
-        //     CallbackJob::dispatch($callback, $status);
-        // }elseif($status === 'to_success'){
-        //     CallbackJob::dispatch($callback, 'success');
-        // }elseif($status === 'fraud'){
-        //     CallbackJob::dispatch($callback, $status);
-        // }
-        
-        // UpdateJob::dispatch($exchange);
-
+    protected function storeProfit($hash_id, $amount_profit){
+        ProfitUser::create([
+            'hash_id'=>$hash_id,
+            'amount_profit'=>$amount_profit,
+            'changed_at'=>Carbon::now(),
+        ]);
     }
 }
+
+
+
+
+
+            // $platform = Platform::where('hash_id', $exchange_id->agent_id)->first();
+            // Log::info("getPlatformUser: ", [$platform]);
+            
+            // if($platform){
+            //     Log::info("getPlatformID: ", [$exchange_id->agent_id]);
+                
+            //     // заработок платформы в роли куратора
+            //     Platform::where('hash_id', $exchange_id->agent_id)->increment('balance', $exchange_id->amount_client);
+            //     Log::info("sendAmountPlatform");
+            // }else{
+                
+            //     Log::info("sendAmountAgent");
+            // }

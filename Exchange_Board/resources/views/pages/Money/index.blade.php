@@ -11,23 +11,27 @@
             <table class="table" id="clients">
                 <thead>
                     <tr>
-                        <th>Exchange_id</th>
-                        <th>Transaction_id</th>
-                        <th>Отправитель</th>
-                        <th>Получатель</th>
+                        <th>Exchange ID</th>
+                        @if(Auth::user()->hasRole('admin'))
+                            <th>User ID</th>
+                            <th>Роль пользователя</th>
+                        @endif
                         <th>Сумма</th>
                         <th>Статус</th>
+                        <th>Дата</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($transactions as $item)
+                    @foreach($transactions['data'] as $item)
                     <tr>
                         <td>{{$item->exchange_id}}</td>
-                        <td>{{$item->transaction_id}}</td>
-                        <td>{{$item->owner_address}}</td>
-                        <td>{{$item->address_to}}</td>
+                        @if(Auth::user()->hasRole('admin'))
+                            <td>{{$item->user_id}}</td>
+                            <td>{{$item->user_role}}</td>
+                        @endif
                         <td>{{$item->amount}}</td>
                         <td>{{$item->status}}</td>
+                        <td>{{$item->created_at}}</td>
                         
                     </tr>
                     @endforeach

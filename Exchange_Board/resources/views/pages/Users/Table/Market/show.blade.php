@@ -20,6 +20,11 @@
                         <button class="btn btn-primary btn-round">{{$data['market']['status']}}</button>
                     </div>
                 </form>
+                @if(Auth::user()->hasRole('admin'))
+                <div class="card-footer">
+                    <p>Время сегодня в сети: {{$data['online_time']}}</p>
+                </div>
+                @endif
                 <div class="card-footer">
                     <button onclick="window.history.back()" class="btn btn-primary btn-round">Назад</button>
                 </div>

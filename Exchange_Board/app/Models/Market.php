@@ -29,4 +29,9 @@ class Market extends Model
     {
         return $this->hasMany(AddMarketDetails::class);
     }
+
+    public function statuses():HasMany
+    {
+        return $this->hasMany(MarketStatus::class);
+    }
 }

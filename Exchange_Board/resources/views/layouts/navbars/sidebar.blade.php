@@ -65,13 +65,13 @@
                     <p>{{ __('Отправка TRX') }}</p>
                 </a>
             </li>
+            @endif
             <li @if ($pageSlug == 'send') class="active " @endif>
                 <a href="{{ route('money.index')  }}">
                     <i class="tim-icons icon-single-copy-04"></i>
                     <p>{{ __('Переводы') }}</p>
                 </a>
             </li>
-            @endif
             @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('market'))
             <li @if ($pageSlug == 'top up') class="active " @endif>
                 <a href="{{ route('top_up.index')  }}">
