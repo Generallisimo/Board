@@ -16,7 +16,8 @@ class IndexController extends BaseController
         $transactions = $this->service->index();
         // dd($transactions);
         // $transactions = Transaction::all();
-
-        return view('pages.Money.index', compact('transactions'));
+        // if($transactions === false){
+            return view('pages.Money.index', compact('transactions'));
+        // }
     }
 }

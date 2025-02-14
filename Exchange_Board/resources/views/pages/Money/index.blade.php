@@ -8,6 +8,9 @@
                 <h5 class="title">Переводы</h5>
             </div>
             <div class="table-responsive">
+            @if($transactions['data']->isEmpty())
+            <p class="text-center mt-4">Пока нет переводов</p>
+            @else
             <table class="table" id="clients">
                 <thead>
                     <tr>
@@ -37,6 +40,7 @@
                     @endforeach
                 </tbody>
             </table>
+            @endif
             </div>
         </div>
     </div>

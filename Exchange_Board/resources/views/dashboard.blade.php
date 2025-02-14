@@ -16,13 +16,25 @@
                     <div class="card-body" >
                         <div class="chart-area ml-2" style="height: auto;">
                         @if(Auth::user()->hasRole('market'))
-                            <h5 class="card-category">Настройки</h5>
-                            <form method="GET" action="{{route('table.user.market.show', ['hash_id'=>$data['user']->hash_id])}}">
-                                @csrf
-                                <button type="submit" rel="tooltip" class="btn btn-info btn-sm btn-icon">
-                                    <i class="tim-icons icon-single-02"></i>
-                                </button>
-                            </form>
+                        <div class="d-flex" style="justify-content: space-around;">
+                            <div style="text-align: center">
+                                <h5 class="card-category">Реквизиты</h5>
+                                <form method="GET" action="{{route('table.user.market.show', ['hash_id'=>$data['user']->hash_id])}}">
+                                    @csrf
+                                    <button type="submit" rel="tooltip" class="btn btn-info btn-sm btn-icon">
+                                        <i class="tim-icons icon-single-02"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            <div style="text-align: center">
+                                <h5 class="card-category">Статус</h5>
+                                <form method="post" action="{{route('table.user.market.update', ['hash_id'=>$data['user']->hash_id])}}" autocomplete="off">
+                                    @method('PUT')
+                                    @csrf
+                                        <button class="btn btn-primary btn-sm">{{$data['user']->status}}</button>
+                                </form>
+                            </div>
+                        </div>
                         @endif
                         </div>
                     </div>

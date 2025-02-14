@@ -16,12 +16,12 @@ class Services
             // dd($data);
         }elseif($user->hasRole('market')){
             $data = Transaction::where('user_id', $user->hash_id)->get();
+
         }elseif($user->hasRole('client')){
             $data = Transaction::where('user_id', $user->hash_id)->get();
         }elseif($user->hasRole('agent')){
             $data = Transaction::where('user_id', $user->hash_id)->get();
         }
-
         return [
             'data'=>$data
         ];
