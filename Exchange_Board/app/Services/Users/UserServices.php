@@ -124,6 +124,9 @@ class UserServices
 
     
     protected function createMarket($hash_id, $details_from, $details_to, $percent, $agent_id, $private_key){
+        
+        $api_key = Str::random(15);
+        
         $market = Market::create([
             'hash_id' => $hash_id,
             'balance'=>'0',
@@ -132,6 +135,7 @@ class UserServices
             'percent'=>$percent,
             'agent_id'=>$agent_id,
             'private_key'=>$private_key,
+            'api_key'=>$api_key,
         ]);
 
         MarketStatus::create([

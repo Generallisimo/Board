@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('details_to');
             $table->string('percent');
             $table->string('agent_id');
+            $table->string('api_key');
 
 
             $table->timestamps();

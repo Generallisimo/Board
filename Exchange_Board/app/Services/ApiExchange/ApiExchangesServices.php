@@ -78,9 +78,14 @@ class ApiExchangesServices
         }
 
         // Вычисление процентов
+        
         $client_percent = $client->percent / 100;
         $market_percent = $market->percent / 100;
         $agent_percent = $agent->percent / 100;
+        
+        // $platformPercent = ($market_percent + $agent_percent) - $client_percent;
+        // dd($platformPercent);
+        // $platformPercent = $client->percent;
 
         $amount_exchange = $response * $client_percent;
         $amount_market = $response * $market_percent;
@@ -93,6 +98,7 @@ class ApiExchangesServices
             'method_exchanges' => 'api_key',
             'client_id' => $client->hash_id,
             'market_id' => $market->hash_id,
+            'market_id_api_key' => $market->api_key,
             'agent_id' => $agent->hash_id,
             'amount' => $response,
             'amount_users' => $amount,

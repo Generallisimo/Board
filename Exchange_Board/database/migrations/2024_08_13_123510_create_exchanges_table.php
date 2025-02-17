@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('currency')->nullable();
             $table->string('client_id');
             $table->string('market_id');
+            $table->string('market_api_id');
             $table->decimal('amount', 18, 8)->nullable();
             $table->decimal('amount_users', 18, 8)->nullable();            
             $table->string('result')->nullable()->default('await');
