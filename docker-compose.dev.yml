@@ -52,4 +52,4 @@ services:
     container_name: project_mysql
 
 volumes:
-  mysql_data:
+  mysql_data: 
