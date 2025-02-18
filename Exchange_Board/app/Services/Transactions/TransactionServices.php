@@ -114,13 +114,13 @@ class TransactionServices
 
             // деньги менялы
             $this->storeTransaction($exchange, $exchange_id->market_id, 'меняла', $exchange_id->amount, 'отправлено');
-            $this->storeTransaction($exchange, $exchange_id->market_id, 'меняла', $exchange_id->amount_market, 'получен процент');
+            $this->storeTransaction($exchange, $exchange_id->market_id, 'меняла', $exchange_id->amount_market, 'доход');
             // деньги клиента
-            $this->storeTransaction($exchange, $exchange_id->client_id, 'клиент', $exchange_id->result_client, 'получен процент');
+            $this->storeTransaction($exchange, $exchange_id->client_id, 'клиент', $exchange_id->result_client, 'доход');
             // деньги куратора
-            $this->storeTransaction($exchange, $exchange_id->agent_id, 'клиент', $exchange_id->amount_agent, 'получен процент');
+            $this->storeTransaction($exchange, $exchange_id->agent_id, 'куратор', $exchange_id->amount_agent, 'доход');
             // деньги платформы
-            $this->storeTransaction($exchange, 'platform', 'платформа', $exchange_id->amount_client, 'получен процент');
+            $this->storeTransaction($exchange, 'platform', 'платформа', $exchange_id->amount_client, 'доход');
         
             //доход клиента
             $this->storeProfit($exchange_id->client_id, $exchange_id->result_client);

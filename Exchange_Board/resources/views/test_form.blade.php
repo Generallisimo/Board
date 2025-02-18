@@ -25,7 +25,7 @@
 <body>
     <div class="card">
         <div class="card-body">
-            <form action="{{config('url.api_local')}}/api/payment/maEC1tPc1bQ3/200/rub" method="post">
+            <form action="{{config('url.api_local')}}/api/payment/t50tEA4hO6f5/200/rub" method="post">
                 <h1>Тестовый переход на оплату</h1>
                 <div class="form-group">
                     <input name="callback" class="form-control" value="{{config('url.api_local')}}/api/test/show" hidden>

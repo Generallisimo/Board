@@ -64,6 +64,7 @@ class ExchangeServices
             'success'=>true,
             'client_id'=>$client_id,
             'market_id'=>$market_id,
+            'market_api_key' => $market->api_key,
             'amount'=>$amount,
             'exchange_id'=>$exchange_id,
             'currency'=>$currency,
@@ -102,10 +103,11 @@ class ExchangeServices
             $client_percent = $client->percent / 100;
             $market_percent = $market->percent / 100;
             $agent_percent = $agent->percent / 100;
-            
+            $platform_percent = $client_percent - ($market_percent + $agent_percent);
+
             $response = $amount * (1 / $curse['message']);
             
-            $amount_exchange = $response * $client_percent;
+            $amount_exchange = $response * $platform_percent;
             $amount_market = $response * $market_percent;
             $amount_agent = $response * $agent_percent;
             $amount_client = $response -($amount_exchange + $amount_agent + $amount_market);
@@ -116,6 +118,7 @@ class ExchangeServices
                 'success'=>true,
                 'client'=>$client_id,
                 'market'=>$market_id,
+                'market_api_key' => $market->api_key,
                 'agent'=>$agent->hash_id,
                 'amount_users'=>$amount,
                 'amount'=>$response,
@@ -147,12 +150,14 @@ class ExchangeServices
         if ($exchange) {
             return true;
         }
+        // dd($data);
 
         $exchange = new Exchange([
             'exchange_id' => $exchange_id,
             'method_exchanges'=>'api_link',
             'client_id' => $data['client_id'],
             'market_id' => $data['market_id'],
+            'market_api_key' => $data['market_api_key'],
             'agent_id' => $data['agent_id'],
             'amount' => $data['amount'],
             'amount_users'=> $data['amount_users'],

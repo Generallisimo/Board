@@ -24,6 +24,7 @@ class StoreRequest extends FormRequest
         return [
             'client_id' => 'required',
             'market_id' => 'required',
+            'market_api_key' => 'required',
             'agent_id' => 'required',
             'amount' => 'required',
             'amount_users' =>'required',

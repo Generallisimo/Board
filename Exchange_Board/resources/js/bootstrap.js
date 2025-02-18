@@ -26,13 +26,14 @@ console.log(import.meta.env)
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
-    wsHost: import.meta.env.VITE_PUSHER_HOST ?? '195.2.85.68',
+    key: import.meta.env.VITE_PUSHER_APP_KEY ?? 'df5fd745214dcac3d931',
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'eu',
+    wsHost: import.meta.env.VITE_PUSHER_HOST ?? '127.0.0.1',
     wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
     wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
     forceTLS: false,
     enabledTransports: ['ws', 'wss'],
-    disableStats: false
+    disableStats: false,
+    encrypted: false
 });
 // console.log(window.Echo)

@@ -16,7 +16,7 @@ class StoreController extends BaseController
     public function __invoke($exchange_id, StoreRequest $storeRequest)
     {
         $data = $storeRequest->validated();
-
+        
 
         $fileUrl = null;
         if ($storeRequest->hasFile('photo')) {

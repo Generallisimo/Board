@@ -8,7 +8,9 @@ document.addEventListener('DOMContentLoaded', function () {
         let message = messageInput.value;
         let chat_id = document.getElementById('chat_id').value;
         let send_id = document.getElementById('user_id').value;
-
+        console.log(message)
+        console.log(chat_id)
+        console.log(send_id)
         const url = window.apiUrl;
         fetch(`${url}/api/support/store`, {
             method: 'POST',
@@ -24,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             console.log('Message sent:', data);
+            console.log(data)
             console.log(data.message)
             messageInput.value = ''; 
         })

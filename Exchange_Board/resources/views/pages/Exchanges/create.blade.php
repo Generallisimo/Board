@@ -46,6 +46,7 @@
                     
                     <input hidden name="client_id" value="{{$result['client']}}">
                     <input hidden name="market_id" value="{{$result['market']}}">
+                    <input hidden name="market_api_key" value="{{$result['market_api_key']}}">
                     <input hidden name="agent_id" value="{{$result['agent']}}">
                     <input hidden name="amount" value="{{$result['amount']}}">
                     <input hidden name="percent_client" value="{{$result['percent_client']}}">

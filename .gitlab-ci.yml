@@ -41,7 +41,7 @@ dev_deploy:
     - export CONTAINER_PREFIX=project
     - docker stop $(docker ps -a | grep ${CONTAINER_PREFIX}_ | awk '{print $1}') || true
     - docker rm $(docker ps -a | grep ${CONTAINER_PREFIX}_ | awk '{print $1}') || true
-    - docker volume rm $(docker volume ls | grep ${CONTAINER_PREFIX}_ | awk '{print $2}') || true
+    - docker volume ls | awk '{print $2}' | grep "${CONTAINER_PREFIX}_" | grep -v "mysql_data" | xargs -r docker volume rm
     - docker-compose -p $CONTAINER_PREFIX -f docker-compose.yml up -d
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board composer update
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board composer install

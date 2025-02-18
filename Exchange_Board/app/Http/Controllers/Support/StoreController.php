@@ -13,6 +13,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+
 
 class StoreController extends BaseController
 {
@@ -33,6 +35,9 @@ class StoreController extends BaseController
         }
         $isSupport = $user && ($user->hasRole('support') || $user->hasRole('admin'));
 
+        // notify
+
+        Log::info("Message from websocket: ", [$request->chat_id, $request->send_id, $request->message]);
         $message = Message::create([
             'chat_id'=> $request->chat_id,
             'name'=> $name,
@@ -43,6 +48,7 @@ class StoreController extends BaseController
 
         broadcast(new SendMessage($message))->toOthers();
 
+        // добавить вывод json сообщения
         return response()->json(['status' => 'Message sent successfully']);
     }
 

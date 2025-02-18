@@ -24,10 +24,10 @@ class ApiExchangesServices
     }
     
     $exchange_id = Str::uuid();
-
+    
     $curse = (new CheckCurse($currency))->curse();
     $response = $amount * (1 / $curse['message']);
-
+    
     DB::beginTransaction();
 
     try {
@@ -37,7 +37,7 @@ class ApiExchangesServices
             ->inRandomOrder()
             ->lockForUpdate() // Блокируем запись для изменений другими запросами
             ->first();
-
+                    
         if ($market === null) {
             DB::rollBack();
             return [
@@ -78,27 +78,26 @@ class ApiExchangesServices
         }
 
         // Вычисление процентов
-        
         $client_percent = $client->percent / 100;
         $market_percent = $market->percent / 100;
-        $agent_percent = $agent->percent / 100;
+        $agent_percent = $agent->percent / 100;        
+        $platform_percent = $client_percent - ($market_percent + $agent_percent);
         
-        // $platformPercent = ($market_percent + $agent_percent) - $client_percent;
-        // dd($platformPercent);
-        // $platformPercent = $client->percent;
+        // dd($platform_percent, $client_percent, $market_percent, $agent_percent);
 
-        $amount_exchange = $response * $client_percent;
+        $amount_exchange = $response * $platform_percent;
         $amount_market = $response * $market_percent;
         $amount_agent = $response * $agent_percent;
         $amount_client = $response - ($amount_exchange + $amount_agent + $amount_market);
 
+        // dd($agent->hash_id);
         // Сохраняем обмен
         $exchange = new Exchange([
             'exchange_id' => $exchange_id,
             'method_exchanges' => 'api_key',
             'client_id' => $client->hash_id,
             'market_id' => $market->hash_id,
-            'market_id_api_key' => $market->api_key,
+            'market_api_key' => $market->api_key,
             'agent_id' => $agent->hash_id,
             'amount' => $response,
             'amount_users' => $amount,

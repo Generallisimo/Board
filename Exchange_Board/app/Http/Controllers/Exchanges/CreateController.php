@@ -22,7 +22,7 @@ class CreateController extends BaseController
             $currency, $market_id,
             $exchange_id, $data
         );
-
+        // dd($result); 
         if($result['success'] === false){
             return redirect()->back()->withErrors(['error'=>"Обратитесь в поддержку, произошла ошибка"]);
         }else{

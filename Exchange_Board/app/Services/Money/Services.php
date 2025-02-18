@@ -12,15 +12,15 @@ class Services
     public function index(){
         $user = Auth::user();
         if ($user->hasRole('admin')) {
-            $data = Transaction::all();
+            $data = Transaction::latest()->get();
             // dd($data);
         }elseif($user->hasRole('market')){
-            $data = Transaction::where('user_id', $user->hash_id)->get();
+            $data = Transaction::where('user_id', $user->hash_id)->latest()->get();
 
         }elseif($user->hasRole('client')){
-            $data = Transaction::where('user_id', $user->hash_id)->get();
+            $data = Transaction::where('user_id', $user->hash_id)->latest()->get();
         }elseif($user->hasRole('agent')){
-            $data = Transaction::where('user_id', $user->hash_id)->get();
+            $data = Transaction::where('user_id', $user->hash_id)->latest()->get();
         }
         return [
             'data'=>$data
