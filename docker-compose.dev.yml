@@ -23,6 +23,9 @@ services:
       - /var/www/Exchange_Board/vendor
     depends_on:
       - db
+    ports:
+      - 9119:9119
+    command: supervisord
     container_name: project_Exchange_Board
   
   nodetron:
