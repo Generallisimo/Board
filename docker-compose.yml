@@ -51,6 +51,9 @@ services:
       - VITE_PUSHER_APP_CLUSTER=$VITE_PUSHER_APP_CLUSTER  
     depends_on:
       - db
+    ports:
+      - "9119:9119"
+    command: supervisord
     container_name: ${CONTAINER_PREFIX}_Exchange_Board
   nodetron:
     image: $REGISTRY/dev/nodetron:$CI_COMMIT_SHA
