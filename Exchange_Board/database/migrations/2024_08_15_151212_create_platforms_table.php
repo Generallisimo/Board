@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('platforms', function (Blueprint $table) {
             
             $table->id();
-            $table->string('hash_id');
+            $table->string('hash_id')->unique();
             $table->decimal('balance', 18, 8)->nullable();
             $table->string('details_from')->unique();
             $table->string('private_key');

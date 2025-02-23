@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('supports', function (Blueprint $table) {
             $table->id();
-            $table->string('hash_id');
+            $table->string('hash_id')->unique();
             $table->timestamps();
             $table->softDeletes();
 

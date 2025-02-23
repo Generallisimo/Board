@@ -1,18 +1,34 @@
 FROM php:8.2-fpm
 
+# Базовые зависимости и инструменты
 RUN apt-get update && apt-get install -y \
-      apt-utils \
-      libpq-dev \
-      libpng-dev \
-      libzip-dev \
-      zip unzip \
-      git && \
-      docker-php-ext-install pdo_mysql && \
-      docker-php-ext-install bcmath && \
-      docker-php-ext-install gd && \
-      docker-php-ext-install zip && \
-      apt-get clean && \
-      rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    apt-utils \
+    git \
+    zip unzip \
+    libzip-dev \
+    libpng-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libmcrypt-dev \
+    libpng-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# PostgreSQL зависимости
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# PHP расширения
+RUN docker-php-ext-install pdo pdo_mysql pdo_pgsql \
+    && docker-php-ext-install bcmath \
+    && docker-php-ext-install gd \
+    && docker-php-ext-install zip \
+    && docker-php-ext-install pgsql \
+    && docker-php-ext-configure pgsql --with-pgsql=/usr/lib/postgresql \
+    && docker-php-ext-install mysqli
+
+# PHP.ini конфигурация
+RUN echo "extension=pdo.so\nextension=pdo_sqlite.so\nextension=pgsql.so\nextension=pdo_pgsql.so\nextension=bcmath.so\nextension=gd.so\nextension=zip.so" >> /usr/local/etc/php/php.ini
 
 
 COPY ./Exchange_Board /var/www/Exchange_Board

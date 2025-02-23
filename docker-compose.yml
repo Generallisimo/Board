@@ -13,6 +13,8 @@ services:
       - exchange_board
       - nodetron
     container_name: ${CONTAINER_PREFIX}_nginx
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   exchange_board:
     image: $REGISTRY/dev/exchange_board:$CI_COMMIT_SHA
@@ -49,34 +51,38 @@ services:
       - VITE_PUSHER_PORT=$VITE_PUSHER_PORT  
       - VITE_PUSHER_SCHEME=$VITE_PUSHER_SCHEME  
       - VITE_PUSHER_APP_CLUSTER=$VITE_PUSHER_APP_CLUSTER  
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     ports:
       - "9119:9119"
     command: supervisord
     container_name: ${CONTAINER_PREFIX}_Exchange_Board
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   nodetron:
     image: $REGISTRY/dev/nodetron:$CI_COMMIT_SHA
     volumes:
       - ./NodeTRON:/var/www/NodeTRON
     ports:
       - 3000:3000
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     container_name: ${CONTAINER_PREFIX}_NodeTRON
-  db:
-    image: mysql:8.0
-    restart: always
-    volumes:
-      - mysql_data:/var/lib/mysql
-    environment:
-      MYSQL_DATABASE: ExchangeBoard
-      MYSQL_ROOT_PASSWORD: root
-      TZ: Europe/Podgorica
-    ports:
-      - 3306:3306 
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --lower_case_table_names=1 --default-time-zone=Europe/Podgorica 
-    container_name: ${CONTAINER_PREFIX}_mysql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  # db:
+  #   image: mysql:8.0
+  #   restart: always
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   environment:
+  #     MYSQL_DATABASE: ExchangeBoard
+  #     MYSQL_ROOT_PASSWORD: root
+  #     TZ: Europe/Podgorica
+  #   ports:
+  #     - 3306:3306 
+  #   command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --lower_case_table_names=1 --default-time-zone=Europe/Podgorica 
+  #   container_name: ${CONTAINER_PREFIX}_mysql
 
 volumes:
   mysql_data:

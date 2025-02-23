@@ -25,7 +25,7 @@ return new class extends Migration
             
             $table->foreign('hash_id')->references('hash_id')->on('markets')->onDelete('cascade');
             $table->foreign('name_method')->references('name_method')->on('method_payments')->onDelete('cascade');
-            $table->foreign('currency')->references('currency')->on('method_payments')->onDelete('cascade');
+            // $table->foreign('currency')->references('id')->on('method_payments')->onDelete('cascade');
         
             $table->softDeletes();
         });

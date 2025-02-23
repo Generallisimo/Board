@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./Exchange_Board:/var/www/Exchange_Board
+      - ./Exchange_Board/_docker/nginx/local.conf.d:/etc/nginx/conf.d
+      - ./NodeTRON:/var/www/NodeTRON
+    ports:
+      - 8181:80
+    depends_on:
+      - exchange_board
+      - nodetron
+    container_name: project_nginx
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  exchange_board:
+    build: 
+      context: .
+      dockerfile: Exchange_Board/_docker/gitlab/app/Dockerfile
+    volumes:
+      - ./Exchange_Board:/var/www/Exchange_Board
+      - /var/www/Exchange_Board/vendor
+    ports:
+      - 9119:9119
+    command: supervisord
+    container_name: project_Exchange_Board
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  nodetron:
+    build:
+      context: .
+      dockerfile: NodeTRON/_docker/app/Dockerfile
+    volumes:
+      - ./NodeTRON:/var/www/NodeTRON
+      - /var/www/NodeTRON/node_modules
+    ports:
+      - 3000:3000
+    container_name: project_NodeTRON
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+

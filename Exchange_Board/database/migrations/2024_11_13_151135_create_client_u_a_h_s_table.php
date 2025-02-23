@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('client_u_a_h_s', function (Blueprint $table) {
             $table->id();
-            $table->string('hash_id');
+            $table->string('hash_id')->unique();
             $table->string('fraud')->nullable();
             $table->string('balance')->nullable();
             $table->string('details_from');
