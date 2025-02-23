@@ -51,8 +51,7 @@ services:
       - VITE_PUSHER_PORT=$VITE_PUSHER_PORT  
       - VITE_PUSHER_SCHEME=$VITE_PUSHER_SCHEME  
       - VITE_PUSHER_APP_CLUSTER=$VITE_PUSHER_APP_CLUSTER  
-    # depends_on:
-    #   - db
+    
     ports:
       - "9119:9119"
     command: supervisord
@@ -65,8 +64,7 @@ services:
       - ./NodeTRON:/var/www/NodeTRON
     ports:
       - 3000:3000
-    # depends_on:
-    #   - db
+    
     container_name: ${CONTAINER_PREFIX}_NodeTRON
     extra_hosts:
       - "host.docker.internal:host-gateway"
