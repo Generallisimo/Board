@@ -45,7 +45,7 @@ dev_deploy:
     - docker-compose -p $CONTAINER_PREFIX -f docker-compose.yml up -d
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board composer update
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board composer install
-    - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan migrate --force
+    # - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan migrate --force
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan cache:clear
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board php artisan config:cache
     - docker exec ${CONTAINER_PREFIX}_Exchange_Board npm install
