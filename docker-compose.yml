@@ -13,9 +13,9 @@ services:
       - exchange_board
       - nodetron
     container_name: ${CONTAINER_PREFIX}_nginx
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
+ 
   exchange_board:
     image: $REGISTRY/dev/exchange_board:$CI_COMMIT_SHA
     volumes:
@@ -56,8 +56,8 @@ services:
       - "9119:9119"
     command: supervisord
     container_name: ${CONTAINER_PREFIX}_Exchange_Board
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
   nodetron:
     image: $REGISTRY/dev/nodetron:$CI_COMMIT_SHA
     volumes:
@@ -66,8 +66,8 @@ services:
       - 3000:3000
     
     container_name: ${CONTAINER_PREFIX}_NodeTRON
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
   # db:
   #   image: mysql:8.0
   #   restart: always
