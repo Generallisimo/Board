@@ -1,8 +1,8 @@
 <div class="sidebar">
     <div class="sidebar-wrapper">
         <div class="logo">
-            <a href="#" class="simple-text logo-mini">{{ __('BD') }}</a>
-            <a href="#" class="simple-text logo-normal">{{ __('Black Dashboard') }}</a>
+            <a href="#" class="simple-text logo-mini">{{ __('') }}</a>
+            <a href="#" class="simple-text logo-normal">{{ __('PINCASH') }}</a>
         </div>
         <ul class="nav">
             @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('client') || Auth::user()->hasRole('market') ||  Auth::user()->hasRole('agent'))
@@ -69,7 +69,7 @@
             <li @if ($pageSlug == 'send') class="active " @endif>
                 <a href="{{ route('money.index')  }}">
                     <i class="tim-icons icon-single-copy-04"></i>
-                    <p>{{ __('Переводы') }}</p>
+                    <p>{{ __('История платежей') }}</p>
                 </a>
             </li>
             @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('market'))

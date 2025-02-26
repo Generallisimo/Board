@@ -21,11 +21,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('top_up/{wallet}/{hash_id}', ['as' => 'api.update', 'uses' => 'App\Http\Controllers\TopUp\UpdateController']);
 
-Route::group(['prefix'=>'payment', 'middleware' => ['web']], function(){
-    Route::post('/{client_id}/{amount}/{currency}', ['as' => 'payment.index', 'uses' => 'App\Http\Controllers\Exchanges\IndexController']);
-    Route::post('/{client}/{amount}/{currency}/{market}/{exchange_id}', ['as' => 'payment.create', 'uses' => 'App\Http\Controllers\Exchanges\CreateController']);
-    Route::post('/{exchange_id}', ['as' => 'payment.store', 'uses' => 'App\Http\Controllers\Exchanges\StoreController']);
-    Route::get('/update/{exchange}', ['as' => 'payment.update', 'uses' => 'App\Http\Controllers\Exchanges\UpdateController']);
+Route::group(['prefix'=>'payment', 'middleware' => ['web'], 'namespace' => 'App\Http\Controllers\Exchanges'], function(){
+    Route::get('/show/{client_id}/{amount}/{currency}', ['as' => 'payment.show', 'uses' => 'ShowController']);    
+    Route::get('/update/{exchange_id}', ['as' => 'payment.update', 'uses' => 'UpdateController']);
+    Route::get('/status/{exchange_id}', ['as' => 'payment.index', 'uses' => 'IndexController']);
+    
+    
+    
+    
+    // Route::post('/{client}/{amount}/{currency}/{market}/{exchange_id}', ['as' => 'payment.create', 'uses' => 'App\Http\Controllers\Exchanges\CreateController']);
+    // Route::post('/{exchange_id}', ['as' => 'payment.store', 'uses' => 'App\Http\Controllers\Exchanges\StoreController']);
+    // Route::get('/update/{exchange}', ['as' => 'payment.update', 'uses' => 'App\Http\Controllers\Exchanges\UpdateController']);
 });
 
 Route::group(['prefix'=>'support'], function(){

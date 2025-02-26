@@ -2,78 +2,228 @@
 
 namespace App\Services\Exchanges;
 
-use App\Components\CheckCurse\CheckCurse;
-use App\Components\CheckTXID\CheckTXID;
-use App\Components\SendToUserTRON\SendTRON;
-use App\Jobs\UpdateExchangeJob;
-use App\Models\AddMarketDetails;
+use Carbon\Carbon;
 use App\Models\Agent;
 use App\Models\Client;
-use App\Models\Exchange;
 use App\Models\Market;
+use App\Models\Exchange;
 use App\Models\Platform;
 use Illuminate\Support\Str;
+use App\Jobs\UpdateExchangeJob;
+use App\Models\AddMarketDetails;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Components\CheckTXID\CheckTXID;
+use App\Components\CheckCurse\CheckCurse;
+use App\Components\SendToUserTRON\SendTRON;
 
 
 class ExchangeServices
 {
-    // public function index($client_id, $amount, $currency, array $data){
-    public function index($client_id, $amount, $currency, $data){
-        $exchange_id = Str::uuid();
 
-        // $market = Market::where('status', 'online')->inRandomOrder()->first();
-        // // dd($market);
-        // if($market === null){
-        //     return [
-        //         'success'=>false
-        //     ];
-        // }
+    public function show($client_id, $amount, $currency){
+        $currency = strtoupper($currency); // Приводим к верхнему регистру
+
         if($amount <= 0){
             return [
                 'success'=>false,
-                'message'=>'ошибка суммы'
+                'message'=>'error amount'
             ];
         }
-        
-        $curse = (new CheckCurse($currency))->curse();
-        $response = $amount * (1 / $curse['message']);
 
-        $market = Market::where('status', 'online')
-        ->where('balance', '>=', $response)
-        ->inRandomOrder()
-        ->first();
-        
-        if ($market === null) {
+        $exchange_id = Str::uuid();
+
+        $platform = Platform::where('hash_id','platform')->first();
+
+        $platformCommission = $platform->status_commission === 'online'; 
+        $amountBefore = $amount >= 150;
+        $amountAfter = $amount <= 1200;
+        $rangeAmount = in_array($amount % 100, range(1,5));
+        $currencyUAH = $currency === 'UAH';
+
+        if($platformCommission && $amountBefore && $amountAfter && $rangeAmount && $currencyUAH){
+            $randomCommission = rand(1,29);
+            $amount += $randomCommission;
+        }
+
+        $curse = (new CheckCurse($currency))->curse();
+        $amountUSDT = $amount * (1 / $curse['message']);
+
+        DB::beginTransaction();
+
+
+        try{
+            $market = Market::where("status", 'online')
+                ->where('balance', '>=', $amountUSDT)
+                ->inRandomOrder()
+                ->first();
+
+            if($market === null){
+                DB::rollBack();
+                return [
+                    'success' => false, 
+                    'message' => 'Not found market with balance'
+                ];
+            }
+
+            $market->balance -= $amountUSDT;
+            $market->balance_hold += $amountUSDT;
+            $market->save();
+
+            $wallet = AddMarketDetails::where('online', 'online')
+                ->where('currency', $currency)
+                ->where('hash_id', $market->hash_id)
+                ->inRandomOrder()
+                ->first();
+            
+            if($wallet === null){
+                DB::rollBack();
+                return [
+                    'success' => false,
+                    'message' => 'Not found market cards online'
+                ];
+            }
+
+            $client = Client::where('hash_id', $client_id)->first();
+
+            $agent = Agent::where('hash_id', $market->agent_id)->first();
+            
+            $client_percent = $client->percent / 100;
+            $market_percent = $market->percent / 100;
+            $agent_percent = $agent->percent / 100;        
+            $platform_percent = $client_percent - ($market_percent + $agent_percent);
+            
+    
+            $amount_exchange = $amountUSDT * $platform_percent;
+            $amount_market = $amountUSDT * $market_percent;
+            $amount_agent = $amountUSDT * $agent_percent;
+            $amount_client = $amountUSDT - ($amount_exchange + $amount_agent + $amount_market);
+
+            $date = now()->setTimezone('Europe/Podgorica');
+            $paymentDate = Carbon::parse($date)->format('m/d/Y, H:i:s A');
+            
+            
+            $createdTime = Carbon::parse();
+            $expiresAt = $createdTime->addMinutes(30);
+            $remainingSeconds = max(0, $expiresAt->diffInSeconds(now()));
+
+            $exchange = new Exchange([
+                'exchange_id' => $exchange_id,
+                'method_exchanges' => 'api_key',
+                'client_id' => $client->hash_id,
+                'market_id' => $market->hash_id,
+                'market_api_key' => $market->api_key,
+                'agent_id' => $agent->hash_id,
+                'amount' => $amountUSDT,
+                'amount_users' => $amount,
+                'percent_client' => $client_percent * 100,
+                'percent_market' => $market_percent * 100,
+                'percent_agent' => $agent_percent * 100,
+                'method' => $wallet->name_method,
+                'currency' => $currency,
+                'details_market_payment' => $wallet->details_market_to,
+                'amount_client' => $amount_exchange,
+                'amount_market' => $amount_market,
+                'amount_agent' => $amount_agent,
+                'result_client' => $amount_client,
+            ]);
+    
+            $exchange->save();
+    
+            DB::commit();
+
+            return [
+                'success' => true,
+                'exchange_id' => $exchange_id,
+                'amount_users' => $amount,
+                'method' => $wallet->name_method,
+                'wallet_market' => $wallet->details_market_to,
+                'payment_date' => $paymentDate,
+                'remainingTime' => $remainingSeconds,
+                'currency' => $currency
+            ];
+        }catch(\Exception $e){
+            DB::rollBack();
+
             return [
                 'success' => false,
-                'message' => 'Нет доступного менялы с достаточным балансом'
+                'message' => 'Error with db transaction : ' . $e->getMessage()
             ];
         }
+    }
+        
+    public function update($exchange){
+        $date = now()->setTimezone('Europe/Podgorica');
+        $paymentDate = Carbon::parse($date)->format('m/d/Y, H:i:s A');
 
-        $market->balance -= $response;
-        $market->balance_hold += $response;
-        $market->save();
+        $response = Exchange::where('exchange_id', $exchange)->first();
 
-        $market_id=$market->hash_id;
+        $data = $response->toArray();
+        $data['amount_users'] = number_format($response->amount_users, 2, '.', ''); // Оставляем 2 знака после запятой
+        $data['payment_date'] = $paymentDate; 
+        
+        return $data;
+    }
+
+    public function index($exchange){
+        
+        $result = Exchange::where('exchange_id', $exchange)->first();
+        Log::info("getAPIresultExchange: ", [$result]);
+        return ['status' => $result->result];
+    }
+
+
+
+
+    // public function index($client_id, $amount, $currency, $data){
+    //     $exchange_id = Str::uuid();
+        
+    //     if($amount <= 0){
+    //         return [
+    //             'success'=>false,
+    //             'message'=>'ошибка суммы'
+    //         ];
+    //     }
+        
+    //     $curse = (new CheckCurse($currency))->curse();
+    //     $response = $amount * (1 / $curse['message']);
+
+    //     $market = Market::where('status', 'online')
+    //     ->where('balance', '>=', $response)
+    //     ->inRandomOrder()
+    //     ->first();
+        
+    //     if ($market === null) {
+    //         return [
+    //             'success' => false,
+    //             'message' => 'Нет доступного менялы с достаточным балансом'
+    //         ];
+    //     }
+
+    //     $market->balance -= $response;
+    //     $market->balance_hold += $response;
+    //     $market->save();
+
+    //     $market_id=$market->hash_id;
          
-        //add status online for view method payments
-        $market_method = AddMarketDetails::where('hash_id', $market->hash_id)->where('currency', $currency)->where('online', 'online')->get();
-        $unique_method = $market_method->unique('name_method');
+    //     //add status online for view method payments
+    //     $market_method = AddMarketDetails::where('hash_id', $market->hash_id)->where('currency', $currency)->where('online', 'online')->get();
+    //     $unique_method = $market_method->unique('name_method');
 
-        return [
-            'success'=>true,
-            'client_id'=>$client_id,
-            'market_id'=>$market_id,
-            'market_api_key' => $market->api_key,
-            'amount'=>$amount,
-            'exchange_id'=>$exchange_id,
-            'currency'=>$currency,
-            'unique_method'=>$unique_method,
-            'callback'=>$data
-        ];
+    //     return [
+    //         'success'=>true,
+    //         'client_id'=>$client_id,
+    //         'market_id'=>$market_id,
+    //         'market_api_key' => $market->api_key,
+    //         'amount'=>$amount,
+    //         'exchange_id'=>$exchange_id,
+    //         'currency'=>$currency,
+    //         'unique_method'=>$unique_method,
+    //         'callback'=>$data
+    //     ];
         
     
-    }
+    // }
 
     public function create($client_id,$amount, $currency, $market_id, $exchange_id, array $data){
 
@@ -178,9 +328,5 @@ class ExchangeServices
         return $exchange->save() ? true : false;
     }
 
-    public function update($exchange){
-        $response = Exchange::where('exchange_id', $exchange)->first();
 
-        return ['message'=>$response->result];
-    }
 }

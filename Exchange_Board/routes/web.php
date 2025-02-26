@@ -83,10 +83,10 @@ Route::group(['middleware' => 'auth'], function () {
 
 Auth::routes();
 
-Route::group(['prefix'=>'support', 'middleware' => ['guest']], function(){
-	Route::get('/', ['as'=>'support.index', 'uses'=>'App\Http\Controllers\Support\IndexController']);
-	Route::get('/show/{chat_id}', ['as'=>'support.show', 'uses'=>'App\Http\Controllers\Support\ShowController']);
-	Route::delete('/destroy/{chat_id}', ['as'=>'chat.destroy', 'uses'=>'App\Http\Controllers\Support\DestroyController']);
+Route::group(['prefix'=>'support', 'middleware' => ['guest'], 'namespace'=>'App\Http\Controllers\Support'], function(){
+	Route::get('/', ['as'=>'support.index', 'uses'=>'IndexController']);
+	Route::get('/show/{chat_id}', ['as'=>'support.show', 'uses'=>'ShowController']);
+	Route::delete('/destroy/{chat_id}', ['as'=>'chat.destroy', 'uses'=>'DestroyController']);
 });
 
 

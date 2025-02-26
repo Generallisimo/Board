@@ -13,7 +13,14 @@ class UpdateController extends BaseController
     public function __invoke($exchange)
     {
         $data = $this->service->update($exchange);
-        
-        return response()->json(['status'=>$data['message']]);
+        // dd($data);
+        return view('pages.Exchanges.update', ['data'=>$data]);
+
+
+        // return response()->json(['status'=>$data['message']]);
+        // if($result['success'] === true){
+        // }else{
+            // return view('pages.Exchanges.error.error_market');
+        // }
     }   
 }

@@ -17,7 +17,8 @@ class StoreController extends BaseController
         if($data['success']){
             return response()->json($data);
         }else{
-            abort(403, 'Нет доступа к этому api');
+            return response()->json($data);
+            // abort(403, 'Нет доступа к этому api');
         }
     }
 }

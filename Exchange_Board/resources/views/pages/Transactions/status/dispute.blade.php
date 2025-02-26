@@ -40,7 +40,7 @@
             {{-- <td>{{$exchange->percent_client}}</td> --}}
             <td>{{$exchange->result_client}}</td>
             <td class="td-actions text-right">
-                <form method="POST" action="{{route('transaction.update',['exchange_id'=> $exchange->exchange_id, 'status'=>'to_success', 'message'=>'Ожидания получения суммы'])}}">
+                <form method="POST" action="{{route('transaction.update',['exchange_id'=> $exchange->exchange_id, 'status'=>'success', 'message'=>'Ожидания получения суммы'])}}">
                     @csrf
                     @method("PUT")
                     <button type="submit" rel="tooltip" class="btn btn-success btn-sm btn-icon">

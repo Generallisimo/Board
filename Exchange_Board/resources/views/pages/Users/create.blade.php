@@ -22,6 +22,7 @@
                 @csrf
                 <div class="card-body">
 
+                    <button type="button" onclick="copyText()" class="btn btn-primary btn-sm">Скопировать Hash ID</button>
                     <div class="form-group">
                         <label>Hash ID</label>
                         <div class="input-group">
@@ -30,7 +31,7 @@
                                     <i class="tim-icons icon-single-02"></i>
                                 </div>
                             </div>
-                            <input type="text" name="hash_id" class="form-control" value="{{ old('hash_id', $data['hash_id']) }}" style="pointer-events: none;">
+                            <input type="text" id="hashInput" name="hash_id" class="form-control" value="{{ old('hash_id', $data['hash_id']) }}" style="pointer-events: none;">
                         </div>
                         @error('hash_id')
                         <div class="text-danger">{{ $message }}</div>
@@ -125,7 +126,13 @@
     </div>
 </div>
 
-
+<script>
+    function copyText() {
+        let inputElement = document.getElementById("hashInput");
+        let hashValue = inputElement.value; // Получаем значение из input
+        navigator.clipboard.writeText(hashValue);
+    }
+</script>
 <script src="{{ asset('js') }}/users/SelectAgentIndex.js"></script>
 
 @endsection

@@ -60,34 +60,11 @@
                     </form>
                     @endif
                 @endif
-                <li class="dropdown nav-item">
-                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                        <div class="photo">
-                            <img src="{{ asset('black') }}/img/anime3.png" alt="{{ __('Profile Photo') }}">
-                        </div>
-                        <b class="caret d-none d-lg-block d-xl-block"></b>
-                        <p class="d-lg-none">{{ __('Выйти') }}</p>
-                    </a>
-                    <ul class="dropdown-menu dropdown-navbar">
-                        <li class="nav-link">
-                            <a href="{{ route('logout') }}" class="nav-item dropdown-item" onclick="event.preventDefault();  document.getElementById('logout-form').submit();">{{ __('Выйти') }}</a>
-                        </li>
-                    </ul>
+                <li class="dropdown nav-item ">
+                    <a href="{{ route('logout') }}" class="btn btn-primary" onclick="event.preventDefault();  document.getElementById('logout-form').submit();">{{ __('Выйти') }}</a>
                 </li>
                 <li class="separator d-lg-none"></li>
             </ul>
         </div>
     </div>
 </nav>
-<div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="{{ __('SEARCH') }}">
-                <button type="button" class="close" data-dismiss="modal" aria-label="{{ __('Close') }}">
-                    <i class="tim-icons icon-simple-remove"></i>
-              </button>
-            </div>
-        </div>
-    </div>
-</div>
