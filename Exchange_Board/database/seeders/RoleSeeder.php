@@ -32,17 +32,17 @@ class RoleSeeder extends Seeder
         Role::create(
             ['name'=>'guest'],
         );
-        Role::create(
-            ['name'=>'client_uah'],
-        );
-        Role::create(
-            ['name'=>'market_uah'],
-        );
-        Role::create(
-            ['name'=>'agent_uah'],
-        );
+        // Role::create(
+        //     ['name'=>'client_uah'],
+        // );
+        // Role::create(
+        //     ['name'=>'market_uah'],
+        // );
+        // Role::create(
+        //     ['name'=>'agent_uah'],
+        // );
 
-        $user = User::find(1);
+        $user = User::where('hash_id', 'platform')->first();
         $user->assignRole('admin');
     }
 }

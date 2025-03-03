@@ -13,20 +13,14 @@ class StoreController extends BaseController
     /**
      * Handle the incoming request.
      */
-    public function __invoke($exchange_id, StoreRequest $storeRequest)
+    public function __invoke($client_id, $amount, $currency)
     {
-        $data = $storeRequest->validated();
-        
-
-        $fileUrl = null;
-        if ($storeRequest->hasFile('photo')) {
-            $file = $storeRequest->file('photo');
-            $filePath = $file->store('public/paymentScreens');
-            $fileUrl = Storage::url($filePath);
+        $result = $this->service->store($client_id, $amount, $currency);
+        // dd($result);
+        if($result['success'] === true){
+            return response()->json($result);
+        }else{
+            return response()->json($result, 400);
         }
-        $data['photo'] = $fileUrl;
-        $result = $this->service->store($exchange_id, $data);
-
-        return view('pages.Exchanges.store', compact('result', 'exchange_id'));
     }
 }
