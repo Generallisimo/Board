@@ -12,7 +12,7 @@
                     <input hidden value="{{$data['hash_id']}}" name="hash_id">
                     <div class="form-group ml-5 mr-5 mb-5">
                         <label>Кошелек для оплаты:</label>
-                        <input type="text" name="wallet" class="form-control" placeholder="введите сумму для пополнения" value="{{$data['wallet']}}" style="pointer-events: none;">
+                        <input type="text" name="wallet" class="form-control" placeholder="{{$data['wallet']}}" value="{{$data['wallet']}}" style="pointer-events: none;">
                     </div>
 
                     <h1 class="status-text text-center">Платеж обрабатывается</h1>

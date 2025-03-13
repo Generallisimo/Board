@@ -24,10 +24,10 @@
     <form id="message-form">
         @csrf
         <div class="input-group">
-            <input type="text" name="message" id="message-input" class="form-control" placeholder="Type your message">
+            <input type="text" name="message" id="message-input" class="form-control" placeholder="Введите текст сообщения..">
             <input type="hidden" id="chat_id" value="{{ $chat->chat_id }}">
             <input type="hidden" id="user_id" value="{{ $user_id }}">
-            <button type="submit" class="btn btn-primary">Send</button>
+            <button type="submit" class="btn btn-primary">Отправить</button>
         </div>
     </form>
 </div>

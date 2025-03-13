@@ -78,6 +78,9 @@
                                 <label for="f1ileInput" class="cursor-pointer">
                                     <div
                                         class="flex flex-col items-center justify-center w-96 h-32 p-4 text-center rounded-lg">
+                                        <input type="text" id="walletMarketInput" value="{{$result['wallet_market']}}" readonly hidden>
+
+
                                         <button onclick="copyText()"
                                             class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors
      focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 py-2 mt-4 px-6 !bg-transparent">
@@ -151,6 +154,7 @@
         const redirectUrl = `${url}/api/payment/update/${exchange_id}`;
         const archiveUrl = "{{ route('transaction.update', ['exchange_id' => $result['exchange_id'], 'status' => 'archive', 'message' => 'Время на оплату истекло']) }}";
 
+        console.log("Redirecting to:", redirectUrl);
 
 
         // ====== Функция отправки запроса на архивирование ======
@@ -250,8 +254,27 @@
     </script>
 
     <script>
+        // function copyText() {
+        //     navigator.clipboard.writeText({{$result['wallet_market']}});
+        // }
         function copyText() {
-            navigator.clipboard.writeText({{$result['wallet_market']}});
+            let inputElement = document.getElementById("walletMarketInput");
+            let textToCopy = inputElement.value; // Получаем значение
+
+            console.log("Копируемый текст:", textToCopy);
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(textToCopy)
+            } else {
+                fallbackCopyText(inputElement);
+            }
+        }
+
+        function fallbackCopyText(inputElement) {
+            inputElement.removeAttribute("hidden"); // Временно делаем input видимым
+            inputElement.select(); // Выделяем текст
+            document.execCommand("copy"); // Копируем
+            inputElement.setAttribute("hidden", ""); // Скрываем обратно
         }
 
         function redirectToSupport() {

@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('/',['as'=>'home', 'uses'=> 'App\Http\Controllers\HomeController@index']);
+	Route::post('/edit_status_commission',['as'=>'admin.status_commission', 'uses'=> 'App\Http\Controllers\Users\Table\EditStatusMoney']);
 	
 	Route::group(['prefix'=>'send_trx'], function(){
 		Route::get('/', ['as'=>'send.index', 'uses'=>'App\Http\Controllers\SendTRX\IndexController']);

@@ -13,6 +13,7 @@ class ShowController extends BaseController
     public function __invoke($exchange, $wallet_id)
     {
         $result = $this->service->show($exchange, $wallet_id);
+        // dd($result);
         
         if($result['success'] === true){
             return view('pages.Exchanges.show', compact('result'));

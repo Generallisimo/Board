@@ -19,7 +19,7 @@ class ExchangeServices
 {
 
     public function store($client_id, $amount, $currency){
-        $currency = strtoupper($currency); // Приводим к верхнему регистру
+        $currency = strtoupper($currency); 
 
         if($amount <= 0){
             return [
@@ -35,14 +35,14 @@ class ExchangeServices
         $platformCommission = $platform->status_commission === 'online'; 
         $amountBefore = $amount >= 150;
         $amountAfter = $amount <= 1200;
-        $rangeAmount = in_array($amount % 100, range(1,5));
+        $rangeAmount = ($amount % 100 >= 0 && $amount % 100 <= 5) || ($amount % 10 == 0);
         $currencyUAH = $currency === 'UAH';
 
         if($platformCommission && $amountBefore && $amountAfter && $rangeAmount && $currencyUAH){
             $randomCommission = rand(1,29);
             $amount += $randomCommission;
         }
-
+        
         $curse = (new CheckCurse($currency))->curse();
         $amountUSDT = $amount * (1 / $curse['message']);
 
@@ -123,7 +123,7 @@ class ExchangeServices
 
             return [
                 'success'=>true,
-                'url'=>config('url.api_local') . "/api/payment/{$exchange_id}/{$wallet->id}"
+                'url'=>config('url.api_local') . "/api/payments/{$exchange_id}/{$wallet->id}"
             ];
         }catch(\Exception $e){
             DB::rollBack();
@@ -137,16 +137,17 @@ class ExchangeServices
 
     public function show($exchange_id, $wallet_id){
         $exchange = Exchange::where('exchange_id',$exchange_id)->first();
+        // dd($exchange_id);
         $exchange->amount_users = number_format($exchange->amount_users, 2, '.', '');
-
         $wallet = AddMarketDetails::where('id', $wallet_id)->first();
 
         $date = now()->setTimezone('Europe/Podgorica');
         $paymentDate = Carbon::parse($date)->format('m/d/Y, H:i:s A');
 
-        $createdTime = $exchange->created_at;
+        $now = now()->setTimezone('Europe/Podgorica')->startOfSecond(); 
+        $createdTime = $exchange->created_at->setTimezone('Europe/Podgorica');
         $expiresAt = $createdTime->copy()->addMinutes(30);
-        $remainingSeconds = max(0, $expiresAt->diffInSeconds(now()));
+        $remainingSeconds = max(0, $expiresAt->diffInSeconds($now));
 
         return [
             'success'=>true,

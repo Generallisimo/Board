@@ -16,6 +16,7 @@ class IndexController extends BaseController
     {  
         $data = $this->service->index($exchange_id);
         Log::info("getDataStatusApiExchange: ", $data);
+        
         return response()->json(['status'=>$data['status']]);
 
 

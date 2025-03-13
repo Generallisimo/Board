@@ -49,7 +49,7 @@
                                             <path d="m9 12 2 2 4-4"></path>
                                         </svg></div>
 
-                                    <p class="font-semibold">PINCASH</p>
+                                    <p class="font-semibold">{{strtoupper($data['client_id'])}}</p>
                                 </div>
                                 @if($data['currency'] === 'RUB')
                                     <p class="mt-3 text-2xl text-white font-semibold">{{$data['amount_users']}} ₽</p>
@@ -67,6 +67,9 @@
                                 </svg><span class="font-semibold ml-1 text-2xl text-white">00:00</span></p>
                             <p class="mt-3 text-sm text-gray-200">{{$data['message']}}</p>
                         </div>
+                    </div>
+                    <div style="display: flex; justify-content: center;">
+                        <img src="{{asset('images/success_exchange.jpg')}}" alt="">
                     </div>
                     @else
                     <div
@@ -86,7 +89,7 @@
                                             </path>
                                             <path d="m9 12 2 2 4-4"></path>
                                         </svg></div>
-                                    <p class="font-semibold">PINCASH</p>
+                                    <p class="font-semibold">{{strtoupper($data['client_id'])}}</p>
                                 </div>
                                 @if($data['currency'] === 'RUB')
                                 <p class="mt-3 text-2xl text-white font-semibold">{{$data['amount_users']}} ₽</p>

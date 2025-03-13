@@ -21,8 +21,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('top_up/{wallet}/{hash_id}', ['as' => 'api.update', 'uses' => 'App\Http\Controllers\TopUp\UpdateController']);
 
+
+Route::get('/payments/{exchange_id}/{wallet_id}', ['as' => 'payment.show', 'uses' => 'App\Http\Controllers\Exchanges\ShowController']);
+    
+
 Route::group(['prefix'=>'payment', 'middleware' => ['web'], 'namespace' => 'App\Http\Controllers\Exchanges'], function(){
-    Route::get('/{exchange_id}/{wallet_id}', ['as' => 'payment.show', 'uses' => 'ShowController']);
     Route::get('/store/{client_id}/{amount}/{currency}', ['as' => 'payment.store', 'uses' => 'StoreController']);    
     Route::get('/update/{exchange_id}', ['as' => 'payment.update', 'uses' => 'UpdateController']);
     Route::get('/status/{exchange_id}', ['as' => 'payment.index', 'uses' => 'IndexController']);

@@ -3,7 +3,8 @@ const TronWeb = require('tronweb');
 async function sendTrx(addressTo, amount, ownerAddress, privateKey){
     try{
         const tronWeb = new TronWeb({
-            fullHost: 'https://api.shasta.trongrid.io',
+            // fullHost: 'https://api.shasta.trongrid.io',
+            fullHost: 'https://api.trongrid.io',
             privateKey: privateKey
         });
         const trxBalance = await tronWeb.trx.getBalance(ownerAddress);

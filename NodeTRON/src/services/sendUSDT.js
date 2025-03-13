@@ -5,11 +5,12 @@ const BigNumber = require('bignumber.js');
 async function sendUSDT(addressTo, amount, ownerAddress, privateKey) {
     try {
         const tronWeb = new TronWeb({
-            fullHost: 'https://api.shasta.trongrid.io',
+            // fullHost: 'https://api.shasta.trongrid.io',
+            fullHost: 'https://api.trongrid.io',
             privateKey: privateKey,
         });
 
-        const contractAddress = 'TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs';
+        const contractAddress = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t';
         const contract = await tronWeb.contract().at(contractAddress);
         
         const amountInSun = new BigNumber(amount).toFixed(0);

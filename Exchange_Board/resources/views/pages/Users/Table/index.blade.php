@@ -46,11 +46,12 @@
                     <tr>
                         <td>{{$client->hash_id}}</td>
                         <td>{{$client->percent}} %</td>
-                        <td>
+                        <td>                    
                             @if(isset($data['profit_client'][$client->hash_id]))
-                                @foreach($data['profit_client'][$client->hash_id] as $date => $profit)
+                                {{-- @foreach($data['profit_client'][$client->hash_id] as $date => $profit)
                                     {{ $profit }}
-                                @endforeach
+                                @endforeach --}}
+                                {{ array_sum($data['profit_client'][$client->hash_id]) }}
                             @else
                                 Нет данных
                             @endif
@@ -60,7 +61,7 @@
                         <td>{{$client->balance}}</td>
                         
                         <td>{{config('url.api_local')}}/api/pay/{currency}/{amount}/{{$client->api_key}}</td>
-                        <td>{{config('url.api_local')}}/api/payment/{{$client->api_link}}/{amount}/{currency}</td>
+                        <td>{{config('url.api_local')}}/api/payment/store/{{$client->api_link}}/{amount}/{currency}</td>
                         @if($client->fraud === null)
                         <td>0</td>
                         @else
@@ -104,9 +105,11 @@
                         <td>{{$agent->percent}} %</td>
                         <td>
                             @if(isset($data['profit_agent'][$agent->hash_id]))
-                                @foreach($data['profit_agent'][$agent->hash_id] as $date => $profit)
+                                {{-- @foreach($data['profit_agent'][$agent->hash_id] as $date => $profit)
                                     {{ $profit }}
-                                @endforeach
+                                @endforeach --}}
+                                {{ array_sum($data['profit_agent'][$agent->hash_id]) }}
+
                             @else
                                 Нет данных
                             @endif
@@ -181,9 +184,11 @@
                         <td>{{$market->percent}} %</td>
                         <td>
                             @if(isset($data['profit_market'][$market->hash_id]))
-                                @foreach($data['profit_market'][$market->hash_id] as $date => $profit)
+                                {{-- @foreach($data['profit_market'][$market->hash_id] as $date => $profit)
                                     {{ $profit }}
-                                @endforeach
+                                @endforeach --}}
+                                {{ array_sum($data['profit_market'][$market->hash_id]) }}
+
                             @else
                                 Нет данных
                             @endif

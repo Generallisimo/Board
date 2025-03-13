@@ -1,7 +1,9 @@
 const axios = require('axios');
 
 async function checkTransaction(address, hours) {
-    const url = `https://api.shasta.trongrid.io/v1/accounts/${address}/transactions/trc20`;
+    // const url = `https://api.shasta.trongrid.io/v1/accounts/${address}/transactions/trc20`;
+    const url = `https://api.trongrid.io/v1/accounts/${address}/transactions/trc20`;
+
 
     try {
         

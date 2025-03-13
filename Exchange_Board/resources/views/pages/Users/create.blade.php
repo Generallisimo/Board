@@ -127,10 +127,40 @@
 </div>
 
 <script>
+    // function copyText() {
+    //     let inputElement = document.getElementById("hashInput");
+    //     let hashValue = inputElement.value; // Получаем значение из input
+    //     navigator.clipboard.writeText(hashValue);
+    // }
     function copyText() {
         let inputElement = document.getElementById("hashInput");
         let hashValue = inputElement.value; // Получаем значение из input
-        navigator.clipboard.writeText(hashValue);
+
+        console.log(hashValue); // Выводим значение в консоль
+
+        if (navigator.clipboard && window.isSecureContext) {
+            // Используем Clipboard API (работает только на HTTPS или localhost)
+            navigator.clipboard.writeText(hashValue)
+                // .then(() => {
+                //     alert("Hash ID скопирован в буфер обмена!");
+                // })
+                // .catch(err => {
+                //     console.error("Ошибка копирования через clipboard API:", err);
+                //     fallbackCopyText(inputElement);
+                // });
+        } else {
+            // Альтернативный метод для HTTP (document.execCommand)
+            fallbackCopyText(inputElement);
+        }
+    }
+
+    function fallbackCopyText(inputElement) {
+        // Для старых браузеров и HTTP-страниц
+        inputElement.removeAttribute("readonly"); // Временно делаем поле редактируемым
+        inputElement.select(); // Выделяем текст
+        document.execCommand("copy"); // Копируем текст
+        inputElement.setAttribute("readonly", ""); // Делаем обратно нередактируемым
+        // alert("Hash ID скопирован (старый метод)!");
     }
 </script>
 <script src="{{ asset('js') }}/users/SelectAgentIndex.js"></script>

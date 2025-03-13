@@ -42,20 +42,15 @@
         @csrf
     </form>
     @else
-    <!-- <div class="col-md-10 text-center ml-auto mr-auto">
-        <h3 class="mb-5">Log in to see how you can speed up your web development with out of the box CRUD for #User Management and more.</h3>
-    </div> -->
     <div class="col-lg-4 col-md-6 mt-5 ml-auto mr-auto">
         <form class="form" method="post" action="{{ route('login') }}">
             @csrf
 
             <div class="card card-login card-white">
                 <div class="card-header">
-                    <img src="{{ asset('black') }}/img/card-primary.png" alt="">
-                    <h1 class="card-title">{{ __('Вход') }}</h1>
                 </div>
                 <div class="card-body">
-                    <!-- <p class="text-dark mb-2">Sign in with <strong>admin@black.com</strong> and the password <strong>secret</strong></p> -->
+                
                     <div class="input-group{{ $errors->has('email') ? ' has-danger' : '' }}">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
@@ -89,9 +84,6 @@
     <script src="{{ asset('black') }}/js/core/bootstrap.min.js"></script>
     <script src="{{ asset('black') }}/js/plugins/perfect-scrollbar.jquery.min.js"></script>
     <!--  Google Maps Plugin    -->
-    <!-- Place this tag in your head or just before your close body tag. -->
-    {{-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script> --}}
-    <!-- Chart JS -->
     {{-- <script src="{{ asset('black') }}/js/plugins/chartjs.min.js"></script> --}}
     <!--  Notifications Plugin    -->
     <script src="{{ asset('black') }}/js/plugins/bootstrap-notify.js"></script>

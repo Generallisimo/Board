@@ -1,8 +1,8 @@
 <div class="sidebar">
     <div class="sidebar-wrapper">
         <div class="logo">
-            <a href="#" class="simple-text logo-mini">{{ __('') }}</a>
-            <a href="#" class="simple-text logo-normal">{{ __('PINCASH') }}</a>
+            <a href="/" class="simple-text logo-mini">{{ __('') }}</a>
+            <a href="/" class="simple-text logo-normal">{{ __('PINCASH') }}</a>
         </div>
         <ul class="nav">
             @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('client') || Auth::user()->hasRole('market') ||  Auth::user()->hasRole('agent'))

@@ -15,7 +15,7 @@
 
                     <div class="form-group">
                         <label>Реквезиты пополнения</label>
-                        <input type="text" name="wallet" class="form-control" placeholder="введите сумму для пополнения" value="{{$data['user']->details_from}}" style="pointer-events: none;">
+                        <input type="text" name="wallet" class="form-control" placeholder="{{$data['user']->details_from}}" value="{{$data['user']->details_from}}" style="pointer-events: none;">
                     </div>
                     @error('wallet')
                         <div class="text-danger">{{ $message }}</div>

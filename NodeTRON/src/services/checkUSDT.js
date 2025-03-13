@@ -4,10 +4,10 @@ const BigNumber = require('bignumber.js');
 async function checkBalance(ownerAddress){
     try{
         const tronWeb = new TronWeb({
-            fullHost: 'https://api.shasta.trongrid.io',
-            // privateKey: '6285daf813fe3497148a2420cf9f30adcae49f4a38ec03db89b0a37d4b5d223e',
+            // fullHost: 'https://api.shasta.trongrid.io',
+            fullHost: 'https://api.trongrid.io',
         });
-        const contractAddress = 'TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs';
+        const contractAddress = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t';
         const contract = await tronWeb.contract().at(contractAddress);
     
         tronWeb.setAddress(ownerAddress);

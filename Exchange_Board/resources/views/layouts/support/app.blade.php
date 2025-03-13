@@ -8,7 +8,7 @@
 
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Support</title>
+        <title>Техническая поддержка</title>
         <!-- Favicon -->
         <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('black') }}/img/apple-icon.png">
         <link rel="icon" type="image/png" href="{{ asset('black') }}/img/favicon.png">

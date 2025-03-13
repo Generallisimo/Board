@@ -1,7 +1,8 @@
 const axios = require('axios');
 
 async function checkTXID(transactionHash, totalTimeout = 300000, delay = 10000) {
-    const url = 'https://api.shasta.trongrid.io/walletsolidity/gettransactionbyid';
+    // const url = 'https://api.shasta.trongrid.io/walletsolidity/gettransactionbyid';
+    const url = 'https://api.trongrid.io/walletsolidity/gettransactionbyid';
 
     const startTime = Date.now();
     

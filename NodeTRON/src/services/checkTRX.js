@@ -3,7 +3,8 @@ const TronWeb = require('tronweb');
 async function checkTrxBalance(ownerAddress) {
     try {
         const tronWeb = new TronWeb({
-            fullHost: 'https://api.shasta.trongrid.io',
+            // fullHost: 'https://api.shasta.trongrid.io',
+            fullHost: 'https://api.trongrid.io',
             // privateKey: 'ваш_приватный_ключ', // если нужно подписывать транзакции
         });
 

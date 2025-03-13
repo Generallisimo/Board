@@ -2,6 +2,13 @@
 
 @section('content')
     <div class="container">
+        @if(Auth::user()->hasRole('admin'))
+        <h3>Смена статуса комиссии</h3>
+        <form method="post" action="{{route('admin.status_commission')}}" class="mb-3">
+            @csrf
+            <button type="submit" class="btn btn-primary">{{$data['user']['status_commission']}}</button>
+        </form>
+        @endif
         <!-- Раздел 1: Баланс -->
         <div class="row mb-4">
             <div class="col-12">
@@ -44,7 +51,7 @@
             <div class="col-lg-4">
                 <div class="card card-chart">
                     <div class="card-header">
-                        <h5 class="card-category">Кошелёк пополнения</h5>
+                        <h5 class="card-category">Кошелёк для пополнения</h5>
                         <h3 class="card-title"><i class="tim-icons icon-money-coins text-info"></i> {{$data['user']->details_from}}</h3>
                     </div>
                 </div>
@@ -53,7 +60,7 @@
                 <div class="card card-chart">
                     <div class="card-header">
                         <h5 class="card-category">
-                            Кошелёк вывода  
+                            Кошелёк для вывода 
                             <a href="{{route('home.wallet.edit', ['hash_id'=>$data['user']->hash_id])}}" class="btn btn-success btn-sm btn-icon">                                    
                                 <i class="tim-icons icon-settings"></i>
                             </a>
@@ -70,20 +77,20 @@
         @if($data['client'] !== null)
         <div class="row mb-4">
             <div class="col-12">
-                <h3>API для оплат</h3>
+                <h3>API для приёма оплат</h3>
             </div>
             <div class="col-lg-6">
                 <div class="card card-chart">
                     <div class="card-header">
                         <h5 class="card-category">REST API</h5>
-                        <h3 class="card-title"><i class="tim-icons icon-key-25 text-info"></i> {{config('url.api_local')}}/api/pay/{currency}/{amount}/{{$data['client']->api_key}}</h3>
+                        <h3 class="card-title"><i class="tim-icons icon-key-25 text-info"></i>GET запрос на: https://pinprocessing.online/api/pay/{currency}/{amount}/{{$data['client']->api_key}}</h3>
                     </div>
                     <div class="card-body">
                         <div class="chart-area" style="height: 240px;">
                             <ul>
-                                <li style="list-style: auto; color: #cfcdcd;">{{config('url.api_local')}}/api/pay/show/{exchange_id}</br></br>Статус ответа, принимает: {номер транзакции}</li></br>
-                                <li style="list-style: auto; color: #cfcdcd;">{currency} - принимает значение rub, uah</br></br>Пример: {rub}</li></br>
-                                <li style="list-style: auto; color: #cfcdcd;">{amount} - принимает цифровое занчение</br></br>Пример: {2500}</li></br>
+                                <li style="list-style: auto; color: #cfcdcd;">{currency} - принимает значение rub, uah, kzt</br></br>Пример: RUB</li></br>
+                                <li style="list-style: auto; color: #cfcdcd;">{amount} - принимает цифровое занчение</br></br>Пример: 2500</li></br>
+                                <li style="list-style: auto; color: #cfcdcd;">https://pinprocessing.online/api/pay/show/{exchange_id}</br></br>Проверка статуса транзакции, принимает: {номер транзакции}.</li></br>
                             </ul>
                         </div>
                     </div>
@@ -94,14 +101,17 @@
                 <div class="card card-chart">
                     <div class="card-header">
                         <h5 class="card-category">SCI - СТРАНИЦА ОПЛАТЫ</h5>
-                        <h3 class="card-title"><i class="tim-icons icon-key-25 text-info"></i> {{config('url.api_local')}}/api/payment/{{$data['client']->api_link}}/{amount}/{currency}</h3>
+                        <h3 class="card-title"><i class="tim-icons icon-key-25 text-info"></i><!--- {{config('url.api_local')}}--->POST запрос на: https://pinprocessing.online/api/payment/store/{{$data['client']->api_link}}/{amount}/{currency}</h3>
                     </div>
                     <div class="card-body">
                         <div class="chart-area" style="height: 240px;">
                             <ul>
-                                <li style="list-style: auto; color: #cfcdcd;">{amount} - принимает цифровое значение</br></br>Пример: {2500}</li></br>
-                                <li style="list-style: auto; color: #cfcdcd;">{currency} - принимает значение rub, uah</br></br>Пример: {rub}</li></br>
-                                <li style="list-style: auto; color: #cfcdcd;">Передать в JSON - url callback для получения статуса</br></br>Принимает значение: {callback}</li></br>
+                                <li style="list-style: auto; color: #cfcdcd;">{amount} - принимает цифровое значение</br></br>Пример: 2500</li></br>
+                                <li style="list-style: auto; color: #cfcdcd;">{currency} - принимает значение rub, uah, kzt</br></br>Пример: RUB</li></br>
+                                <li style="list-style: auto; color: #cfcdcd;">Передать в JSON - url callback для получения статуса</br></br>Принимает значение: {callback} <br>
+								<code>https://pinprocessing.online/api/payment/store/{{$data['client']->api_link}}/2500/RUB</code> <br> В ответ на POST запрос по ссылке вы получаете URL оплаты, который передается пользователю.
+								
+								</li></br>
                             </ul>
                         </div>
                     </div>
@@ -165,12 +175,12 @@
         @if($data['client'] !== null)
         <div class="row mb-4">
             <div class="col-12">
-                <h3>Стата машенников</h3>
+                <h3>Сатистика фрода</h3>
             </div>
             <div class="col-lg-4">
                 <div class="card card-chart">
                     <div class="card-header">
-                        <h5 class="card-category">Количество машенников</h5>
+                        <h5 class="card-category">Количество фрод транзакций</h5>
                         @if($data['client']->fraud === null)
                         <h3 class="card-title"><i class="tim-icons icon-key-25 text-info"></i>0</h3>
                         @else
@@ -191,7 +201,7 @@
             <div class="col-lg-6">
                 <div class="card card-chart">
                     <div class="card-header">
-                        <h5 class="card-category">Обменники онлайн</h5>
+                        <h5 class="card-category">Обменники в сети</h5>
                         <h3 class="card-title"><i class="tim-icons icon-check-2 text-info"></i>{{$data['marketOnlineCount']}} </h3>
                     </div>
                     <div class="card-body">
