@@ -18,6 +18,8 @@ The goal of the project was to practice building a larger Laravel application wi
 - beyondcode/laravel-websockets
 - Spatie Laravel Permission
 - Guzzle HTTP client
+- Node
+- TronLink
 
 ## Frontend
 - Vue 3
